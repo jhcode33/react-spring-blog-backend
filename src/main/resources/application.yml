@@ -1,8 +1,6 @@
-# ?? ?? ??
 server:
   port: 9090
 
-# ?????? ??
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/react_spring_blog
@@ -11,13 +9,19 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect  #JPA? ??? database? dialect ??
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       hibernate:
         hibernate:
-        "[format_sql]": true            #SQL? ?? ?? ??
-        "[user_sql_comments]": true     #SQL?? ? ?? ??
-        "[highlight_sql]": true         #SQL? ??
+        "[format_sql]": true            #SQL ??
+        "[user_sql_comments]": true     #SQL ?? ??
+        "[highlight_sql]": true         #SQL ??
         "[hbm2ddl.auto]": create
     open-in-view: true
     show-sql: true
+
+  jwt:
+    header: Authorization
+    prefix: Bearer
+    secret:
+    tokenExpirationTime: 18000          #?? ?? ?? (?: 300?)
