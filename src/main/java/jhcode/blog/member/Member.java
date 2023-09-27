@@ -3,12 +3,13 @@ package jhcode.blog.member;
 import jakarta.persistence.*;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.common.Role;
+import jhcode.blog.member.dto.MemberRegisterDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +18,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor // 기본 생성자
-public class Member extends BaseTimeEntity implements UserDetails {
+public class Member extends BaseTimeEntity /*implements */ {
 
     @Id @GeneratedValue
     @Column(name = "MEMBER_ID")
@@ -52,31 +53,41 @@ public class Member extends BaseTimeEntity implements UserDetails {
         this.username = username;
     }
 
-    //========== UserDetails implements ==========//
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        authorities.add( new SimpleGrantedAuthority("ROLE_" + this.roles.name()));
-        return authorities;
+    //========== to DTO ==========//
+    public MemberRegisterDTO toRegisterDTO() {
+        return MemberRegisterDTO.builder()
+                .memberId(this.memberId)
+                .email(this.email)
+                .password(this.password)
+                .username(this.username)
+                .build();
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
+//    //========== UserDetails implements ==========//
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//        authorities.add( new SimpleGrantedAuthority("ROLE_" + this.roles.name()));
+//        return authorities;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return true;
+//    }
 }

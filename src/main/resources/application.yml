@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 8989
 
 spring:
   datasource:
@@ -20,8 +20,8 @@ spring:
     open-in-view: true
     show-sql: true
 
-  jwt:
-    header: Authorization
-    prefix: Bearer
-    secret:
-    tokenExpirationTime: 18000          #?? ?? ?? (?: 300?)
+#jwt:
+#  header: Authorization
+#  prefix: Bearer
+#  secret:
+#  tokenExpirationTime: 18000          #?? ?? ?? (?: 300?)
