@@ -1,7 +1,6 @@
 package jhcode.blog.security.jwt;
 
-import jhcode.blog.exception.ResourceNotFoundException;
-import jhcode.blog.member.Member;
+import jhcode.blog.common.exception.ResourceNotFoundException;
 import jhcode.blog.member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

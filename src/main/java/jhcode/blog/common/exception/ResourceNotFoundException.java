@@ -1,4 +1,4 @@
-package jhcode.blog.exception;
+package jhcode.blog.common.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 
