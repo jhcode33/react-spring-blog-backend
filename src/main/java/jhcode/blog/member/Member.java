@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.common.Role;
 import jhcode.blog.member.dto.MemberRegisterDTO;
+import jhcode.blog.member.dto.MemberUpdateDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -56,6 +57,15 @@ public class Member extends BaseTimeEntity /*implements */ {
     //========== to DTO ==========//
     public MemberRegisterDTO toRegisterDTO() {
         return MemberRegisterDTO.builder()
+                .memberId(this.memberId)
+                .email(this.email)
+                .password(this.password)
+                .username(this.username)
+                .build();
+    }
+
+    public MemberUpdateDTO toUpdateDTO() {
+        return MemberUpdateDTO.builder()
                 .memberId(this.memberId)
                 .email(this.email)
                 .password(this.password)

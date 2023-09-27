@@ -16,7 +16,7 @@ spring:
         "[format_sql]": true            #SQL ??
         "[user_sql_comments]": true     #SQL ?? ??
         "[highlight_sql]": true         #SQL ??
-        "[hbm2ddl.auto]": create
+        "[hbm2ddl.auto]": update
     open-in-view: true
     show-sql: true
 
