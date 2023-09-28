@@ -1,6 +1,7 @@
 package jhcode.blog.member;
 
 import jakarta.persistence.*;
+import jhcode.blog.board.Board;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.common.Role;
 import jhcode.blog.member.dto.MemberLoginDTO;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Entity
@@ -37,6 +39,9 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role roles;
+
+    @OneToMany(mappedBy = "member")
+    public List<Board> boards = new ArrayList<>();
 
 
     //========== 생성자 Builder ============//
