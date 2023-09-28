@@ -16,15 +16,17 @@ public class MemberLoginDTO {
     private String password;
     private String passwordConfirmation;
     private String username;
+    private String role;
     private String token;
 
     @Builder
-    public MemberLoginDTO(Long memberId, String email, String password, String passwordConfirmation, String username) {
+    public MemberLoginDTO(Long memberId, String email, String password, String passwordConfirmation, String username, String role) {
         this.memberId = memberId;
         this.email = email;
         this.password = password;
         this.passwordConfirmation = passwordConfirmation;
         this.username = username;
+        this.role = role;
     }
 
     public Member toMemberEntity() {

@@ -79,6 +79,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
                 .email(this.email)
                 .password(this.password)
                 .username(this.username)
+                .role(this.roles.name())
                 .build();
     }
 
