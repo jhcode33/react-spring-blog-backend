@@ -2,6 +2,7 @@ package jhcode.blog.board;
 
 import jakarta.transaction.Transactional;
 import jhcode.blog.board.dto.BoardDTO;
+import jhcode.blog.board.dto.SearchData;
 import jhcode.blog.common.exception.ResourceNotFoundException;
 import jhcode.blog.member.Member;
 import jhcode.blog.member.MemberRepository;
@@ -22,6 +23,19 @@ public class BoardService {
     public Page<Board> getAllBoards(Pageable pageable) {
         Page<Board> boards = boardRepository.findAllWithMember(pageable);
         return boards;
+    }
+
+    // 게시글 검색
+    public Page<Board> search(SearchData searchData, Pageable pageable) {
+        Page<Board> result = null;
+        if (searchData.getTitle() != null) {
+            result = boardRepository.findByTitleContaining(searchData.getTitle(), pageable);
+        } else if (searchData.getContent() != null) {
+            result = boardRepository.findByContentContaining(searchData.getContent(), pageable);
+        } else if (searchData.getUsername() != null) {
+            result = boardRepository.findByUsernameContaining(searchData.getUsername(), pageable);
+        }
+        return result;
     }
 
     // 게시글 등록

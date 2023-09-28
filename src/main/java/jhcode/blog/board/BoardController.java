@@ -1,6 +1,7 @@
 package jhcode.blog.board;
 
 import jhcode.blog.board.dto.BoardDTO;
+import jhcode.blog.board.dto.SearchData;
 import jhcode.blog.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,11 +20,21 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    // 페이징 목록
     @GetMapping("/list")
     public ResponseEntity<Page<Board>> boardList(
             @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Board> listDTO = boardService.getAllBoards(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(listDTO);
+    }
+
+    // 페이징 검색
+    @GetMapping("/search")
+    public ResponseEntity<Page<Board>> search(
+            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestBody SearchData searchData) {
+        Page<Board> searchBoard = boardService.search(searchData, pageable);
+        return  ResponseEntity.status(HttpStatus.OK).body(searchBoard);
     }
 
     @PostMapping("/write")
