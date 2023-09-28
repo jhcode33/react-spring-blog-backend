@@ -40,4 +40,12 @@ public class CommentService {
         comment.update(commentDTO.getContent());
         return comment.toCommentInfoDTO(member.getUsername());
     }
+
+    public void delete(Member member, Long commentId) {
+        Comment comment = commentRepository.findByIdWithMemberAndBoard(commentId).orElseThrow(
+                () -> new ResourceNotFoundException("Comment", "Comment Id", String.valueOf(commentId))
+        );
+        comment.delete(); // 연관관계 삭제
+        commentRepository.deleteById(commentId);
+    }
 }

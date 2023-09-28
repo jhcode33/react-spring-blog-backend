@@ -22,11 +22,12 @@ public class Comment extends BaseTimeEntity {
 
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    // CascadeType.ALL : 댓글이 변하면 연관관계도 변한다
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "MEMBER_ID")
     public Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "BOARD_ID")
     public Board board;
 
@@ -53,6 +54,12 @@ public class Comment extends BaseTimeEntity {
     // update
     public void update(String content) {
         this.content = content;
+    }
+
+    // delete
+    public void delete() {
+        this.member.getComments().remove(this);
+        this.board.getComments().remove(this);
     }
 
     //== to DTO ==//
