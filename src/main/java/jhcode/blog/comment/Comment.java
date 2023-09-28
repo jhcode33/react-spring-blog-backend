@@ -79,9 +79,9 @@ public class Comment extends BaseTimeEntity {
         return CommentsDTO.builder()
                 .id(this.id)
                 .content(this.content)
-                .board(this.board.toBoardInfoDTO())
                 .createdDate(this.getCreateDate().toString())
                 .modifiedDate(this.getModifiedDate().toString())
+                .member(this.member.toMemberInfoDTO())
                 .build();
     }
 }

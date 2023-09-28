@@ -10,6 +10,10 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Board를 검색할 때, 양방향 관계로 인해 직렬화가 반복되는 문제를 해결하기 위한 DTO
+ */
+
 @Getter
 @Setter
 @NoArgsConstructor
