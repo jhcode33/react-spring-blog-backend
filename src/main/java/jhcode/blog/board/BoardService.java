@@ -44,11 +44,17 @@ public class BoardService {
     }
 
     // 게시글 수정
+    // 파일, 댓글 수정될 경우도 생각해야함
     public BoardDTO update(BoardDTO boardDTO) {
         Board updateBoard = boardRepository.findByIdWithMember(boardDTO.getBoardId()).orElseThrow(
                 () -> new ResourceNotFoundException("Board", "Board Id", String.valueOf(boardDTO.getBoardId()))
         );
         updateBoard.update(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getCategory());
         return updateBoard.toBoardDTO();
+    }
+
+    // 게시글 삭제
+    public void delete(Long boardId) {
+        boardRepository.deleteById(boardId);
     }
 }

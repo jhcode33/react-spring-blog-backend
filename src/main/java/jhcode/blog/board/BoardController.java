@@ -48,4 +48,9 @@ public class BoardController {
     }
 
     // 상세보기 -> 삭제
+    @DeleteMapping("/{boardId}/delete")
+    public ResponseEntity<Long> delete(@PathVariable Long boardId) {
+        boardService.delete(boardId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
