@@ -32,4 +32,10 @@ public class BoardController {
         BoardDTO saveBoardDTO = boardService.write(boardDTO, member);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardDTO);
     }
+
+    @GetMapping("/{boardId}")
+    public ResponseEntity<BoardDTO> detail(@PathVariable("boardId") Long boardId) {
+        BoardDTO findBoardDTO = boardService.detail(boardId);
+        return ResponseEntity.status(HttpStatus.OK).body(findBoardDTO);
+    }
 }
