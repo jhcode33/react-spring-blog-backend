@@ -3,23 +3,23 @@ package jhcode.blog.member;
 import jakarta.persistence.*;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.common.Role;
+import jhcode.blog.member.dto.MemberLoginDTO;
 import jhcode.blog.member.dto.MemberRegisterDTO;
 import jhcode.blog.member.dto.MemberUpdateDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Getter
 @Entity
 @NoArgsConstructor // 기본 생성자
-public class Member extends BaseTimeEntity /*implements */ {
+public class Member extends BaseTimeEntity implements UserDetails {
 
     @Id @GeneratedValue
     @Column(name = "MEMBER_ID")
@@ -55,7 +55,7 @@ public class Member extends BaseTimeEntity /*implements */ {
     }
 
     //========== to DTO ==========//
-    public MemberRegisterDTO toRegisterDTO() {
+    public MemberRegisterDTO toMemberRegisterDTO() {
         return MemberRegisterDTO.builder()
                 .memberId(this.memberId)
                 .email(this.email)
@@ -64,7 +64,7 @@ public class Member extends BaseTimeEntity /*implements */ {
                 .build();
     }
 
-    public MemberUpdateDTO toUpdateDTO() {
+    public MemberUpdateDTO toMemberUpdateDTO() {
         return MemberUpdateDTO.builder()
                 .memberId(this.memberId)
                 .email(this.email)
@@ -73,31 +73,50 @@ public class Member extends BaseTimeEntity /*implements */ {
                 .build();
     }
 
-//    //========== UserDetails implements ==========//
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//        authorities.add( new SimpleGrantedAuthority("ROLE_" + this.roles.name()));
-//        return authorities;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return true;
-//    }
+    public MemberLoginDTO toMemberLoginDTO() {
+        return MemberLoginDTO.builder()
+                .memberId(this.memberId)
+                .email(this.email)
+                .password(this.password)
+                .username(this.username)
+                .build();
+    }
+
+    //========== UserDetails implements ==========//
+
+    /**
+     * Token을 고유한 Email 값으로 생성합니다
+     * @return email;
+     */
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add( new SimpleGrantedAuthority("ROLE_" + this.roles.name()));
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

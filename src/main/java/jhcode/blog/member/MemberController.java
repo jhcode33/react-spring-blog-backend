@@ -18,7 +18,7 @@ public class MemberController {
     @PostMapping("/register")
     public ResponseEntity<MemberRegisterDTO> register(@RequestBody MemberRegisterDTO memberRegisterDTO) {
         MemberRegisterDTO successMember = memberService.register(memberRegisterDTO);
-        return ResponseEntity.ok(successMember);
+        return ResponseEntity.status(HttpStatus.CREATED).body(successMember);
     }
 
     @PutMapping("/update")
@@ -29,7 +29,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<MemberLoginDTO> login(@RequestBody MemberLoginDTO memberLoginDTO) {
-        MemberLoginDTO successLogin = memberService.login(memberLoginDTO);
-        return ResponseEntity.status(HttpStatus.OK).body(successLogin);
+        MemberLoginDTO loginDTO = memberService.login(memberLoginDTO);
+        return ResponseEntity.status(HttpStatus.OK).header(loginDTO.getToken()).body(loginDTO);
     }
 }

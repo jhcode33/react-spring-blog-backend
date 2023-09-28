@@ -5,6 +5,7 @@ import jhcode.blog.common.exception.ResourceNotFoundException;
 import jhcode.blog.member.dto.MemberLoginDTO;
 import jhcode.blog.member.dto.MemberRegisterDTO;
 import jhcode.blog.member.dto.MemberUpdateDTO;
+import jhcode.blog.security.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class MemberService {
     public MemberRegisterDTO register(MemberRegisterDTO memberRegisterDTO) {
         if (checkPassword(memberRegisterDTO.getPassword(), memberRegisterDTO.getPasswordConfirmation())) {
             Member saveMember = memberRepository.save(memberRegisterDTO.toMemberEntity());
-            return saveMember.toRegisterDTO();
+            return saveMember.toMemberRegisterDTO();
         } else {
             log.info("회원 가입 실패");
             return null;
@@ -44,7 +45,7 @@ public class MemberService {
                     () -> new ResourceNotFoundException("Member", "Member Email", memberUpdateDTO.getEmail())
             );
             updateMember.update(memberUpdateDTO.getPassword(), memberUpdateDTO.getUsername());
-            return updateMember.toUpdateDTO();
+            return updateMember.toMemberUpdateDTO();
         } else {
             log.info("비밀번호 불일치");
             return null;
@@ -53,7 +54,17 @@ public class MemberService {
 
     public MemberLoginDTO login(MemberLoginDTO memberLoginDTO) {
         if (checkPassword(memberLoginDTO.getPassword(), memberLoginDTO.getPasswordConfirmation())) {
+            Member member = memberRepository.findByEmail(memberLoginDTO.getEmail()).orElseThrow(
+                    () -> new ResourceNotFoundException("Member", "Member Email", memberLoginDTO.getEmail())
+            );
+            String token = "Bearer " + jwtTokenUtil.generateToken(member);
+            MemberLoginDTO loginDTO = member.toMemberLoginDTO();
+            loginDTO.setToken(token);
+            return loginDTO;
 
+        } else {
+            log.info("Token 생성 실패");
+            return null;
         }
     }
 }
