@@ -39,5 +39,13 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.OK).body(findBoardDTO);
     }
 
+    // 상세보기 -> 수정
+    @PutMapping("/{boardId}/update")
+    public ResponseEntity<BoardDTO> update(@RequestBody BoardDTO boardDTO, @PathVariable Long boardId) {
+        boardDTO.setBoardId(boardId);
+        BoardDTO updateBoardDTO = boardService.update(boardDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(updateBoardDTO);
+    }
 
+    // 상세보기 -> 삭제
 }

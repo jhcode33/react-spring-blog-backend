@@ -46,6 +46,13 @@ public class Board extends BaseTimeEntity {
         this.viewCount++;
     }
 
+    //== 수정 Dirty Checking ==//
+    public void update(String title, String content, String category) {
+        this.title = title;
+        this.content = content;
+        this.category = category;
+    }
+
     //== Member & Board 연관관계 편의 메소드 ==//
     public void setMappingMember(Member member) {
         this.member = member;

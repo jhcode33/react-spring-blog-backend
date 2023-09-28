@@ -42,4 +42,13 @@ public class BoardService {
        findBoard.upViewCount();
        return findBoard.toBoardDTO();
     }
+
+    // 게시글 수정
+    public BoardDTO update(BoardDTO boardDTO) {
+        Board updateBoard = boardRepository.findByIdWithMember(boardDTO.getBoardId()).orElseThrow(
+                () -> new ResourceNotFoundException("Board", "Board Id", String.valueOf(boardDTO.getBoardId()))
+        );
+        updateBoard.update(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getCategory());
+        return updateBoard.toBoardDTO();
+    }
 }
