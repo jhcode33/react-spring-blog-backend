@@ -38,6 +38,8 @@ public class BoardService {
        Board findBoard = boardRepository.findByIdWithMember(boardId).orElseThrow(
                () -> new ResourceNotFoundException("Board", "Board Id", String.valueOf(boardId))
        );
+       // 조회수 증가
+       findBoard.upViewCount();
        return findBoard.toBoardDTO();
     }
 }

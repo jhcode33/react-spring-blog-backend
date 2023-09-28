@@ -38,4 +38,6 @@ public class BoardController {
         BoardDTO findBoardDTO = boardService.detail(boardId);
         return ResponseEntity.status(HttpStatus.OK).body(findBoardDTO);
     }
+
+
 }

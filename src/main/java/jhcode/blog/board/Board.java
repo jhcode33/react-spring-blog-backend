@@ -23,7 +23,7 @@ public class Board extends BaseTimeEntity {
     private String content;
 
     @Column(name = "VIEW_COUNT")
-    private Integer viewCount;
+    private int viewCount;
 
     private String category;
 
@@ -32,13 +32,18 @@ public class Board extends BaseTimeEntity {
     public Member member;
 
     @Builder
-    public Board(Long id, String title, String content, Integer viewCount, String category, Member member) {
+    public Board(Long id, String title, String content, int viewCount, String category, Member member) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
         this.category = category;
         this.member = member;
+    }
+
+    //== 조회수 증가 ==//
+    public void upViewCount() {
+        this.viewCount++;
     }
 
     //== Member & Board 연관관계 편의 메소드 ==//

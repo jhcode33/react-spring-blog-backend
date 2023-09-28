@@ -15,12 +15,12 @@ public class BoardDTO {
     private Long boardId;
     private String title;
     private String content;
-    private Integer viewCount;
+    private int viewCount;
     private String category;
     private Member member;
 
     @Builder
-    public BoardDTO(Long boardId, String title, String content, Integer viewCount, String category, Member member) {
+    public BoardDTO(Long boardId, String title, String content, int viewCount, String category, Member member) {
         this.boardId = boardId;
         this.title = title;
         this.content = content;
