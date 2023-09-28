@@ -16,14 +16,14 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     Optional<Board> findByIdWithMember(Long boardID);
 
     // 제목 검색
-    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member WHERE b.title LIKE %:title%")
+    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments WHERE b.title LIKE %:title%")
     Page<Board> findByTitleContaining(String title, Pageable pageable);
 
     // 내용 검색
-    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member WHERE b.content LIKE %:content%")
+    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments WHERE b.content LIKE %:content%")
     Page<Board> findByContentContaining(String content, Pageable pageable);
 
     // 작성자 검색
-    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member WHERE b.member.username LIKE %:username%")
+    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments WHERE b.member.username LIKE %:username%")
     Page<Board> findByUsernameContaining(String username, Pageable pageable);
 }

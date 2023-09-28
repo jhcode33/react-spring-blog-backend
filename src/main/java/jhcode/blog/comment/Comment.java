@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jhcode.blog.board.Board;
 import jhcode.blog.comment.dto.CommentDTO;
 import jhcode.blog.comment.dto.CommentInfoDTO;
+import jhcode.blog.comment.dto.CommentsDTO;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.member.Member;
 import lombok.Builder;
@@ -68,6 +69,16 @@ public class Comment extends BaseTimeEntity {
                 .id(this.id)
                 .content(this.content)
                 .writerName(writerName)
+                .board(this.board.toBoardInfoDTO())
+                .createdDate(this.getCreateDate().toString())
+                .modifiedDate(this.getModifiedDate().toString())
+                .build();
+    }
+
+    public CommentsDTO toCommentInfoDTO() {
+        return CommentsDTO.builder()
+                .id(this.id)
+                .content(this.content)
                 .board(this.board.toBoardInfoDTO())
                 .createdDate(this.getCreateDate().toString())
                 .modifiedDate(this.getModifiedDate().toString())

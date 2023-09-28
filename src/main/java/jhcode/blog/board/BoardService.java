@@ -2,14 +2,19 @@ package jhcode.blog.board;
 
 import jakarta.transaction.Transactional;
 import jhcode.blog.board.dto.BoardDTO;
+import jhcode.blog.board.dto.BoardListDTO;
 import jhcode.blog.board.dto.SearchData;
 import jhcode.blog.common.exception.ResourceNotFoundException;
 import jhcode.blog.member.Member;
 import jhcode.blog.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,13 +25,16 @@ public class BoardService {
     private final MemberRepository memberRepository;
 
     // 페이징 리스트
-    public Page<Board> getAllBoards(Pageable pageable) {
+    public Page<BoardListDTO> getAllBoards(Pageable pageable) {
         Page<Board> boards = boardRepository.findAllWithMemberAndComments(pageable);
-        return boards;
+        List<BoardListDTO> list = boards.getContent().stream()
+                .map(Board::toBoardListDTO)
+                .collect(Collectors.toList());
+        return new PageImpl<>(list, pageable, boards.getTotalElements());
     }
 
     // 게시글 검색
-    public Page<Board> search(SearchData searchData, Pageable pageable) {
+    public Page<BoardListDTO> search(SearchData searchData, Pageable pageable) {
         Page<Board> result = null;
         if (searchData.getTitle() != null) {
             result = boardRepository.findByTitleContaining(searchData.getTitle(), pageable);
@@ -35,7 +43,10 @@ public class BoardService {
         } else if (searchData.getUsername() != null) {
             result = boardRepository.findByUsernameContaining(searchData.getUsername(), pageable);
         }
-        return result;
+        List<BoardListDTO> list = result.getContent().stream()
+                .map(Board::toBoardListDTO)
+                .collect(Collectors.toList());
+        return new PageImpl<>(list, pageable, result.getTotalElements());
     }
 
     // 게시글 등록

@@ -3,6 +3,7 @@ package jhcode.blog.board;
 import jakarta.persistence.*;
 import jhcode.blog.board.dto.BoardDTO;
 import jhcode.blog.board.dto.BoardInfoDTO;
+import jhcode.blog.board.dto.BoardListDTO;
 import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.member.Member;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -87,6 +89,18 @@ public class Board extends BaseTimeEntity {
                 .viewCount(this.viewCount)
                 .category(this.category)
                 .member(this.member.toMemberInfoDTO())
+                .build();
+    }
+
+    public BoardListDTO toBoardListDTO() {
+        return BoardListDTO.builder()
+                .boardId(this.id)
+                .title(this.title)
+                .content(this.content)
+                .viewCount(this.viewCount)
+                .category(this.category)
+                .member(this.member.toMemberInfoDTO())
+                .comments(this.comments.stream().map(Comment::toCommentInfoDTO).collect(Collectors.toList()))
                 .build();
     }
 }
