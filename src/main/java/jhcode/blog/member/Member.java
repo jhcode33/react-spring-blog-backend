@@ -1,9 +1,10 @@
 package jhcode.blog.member;
 
 import jakarta.persistence.*;
-import jhcode.blog.board.Board;
+import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.common.Role;
+import jhcode.blog.member.dto.MemberInfoDTO;
 import jhcode.blog.member.dto.MemberLoginDTO;
 import jhcode.blog.member.dto.MemberRegisterDTO;
 import jhcode.blog.member.dto.MemberUpdateDTO;
@@ -25,7 +26,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     @Id @GeneratedValue
     @Column(name = "MEMBER_ID")
-    private Long memberId;
+    private Long id;
 
     // 이메일로 로그인함
     @Column(nullable = false)
@@ -40,8 +41,8 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role roles;
 
-//    @OneToMany(mappedBy = "member")
-//    public List<Board> boards = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    public List<Comment> comments = new ArrayList<>();
 
 
     //========== 생성자 Builder ============//
@@ -62,7 +63,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     //========== to DTO ==========//
     public MemberRegisterDTO toMemberRegisterDTO() {
         return MemberRegisterDTO.builder()
-                .memberId(this.memberId)
+                .memberId(this.id)
                 .email(this.email)
                 .password(this.password)
                 .username(this.username)
@@ -71,7 +72,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     public MemberUpdateDTO toMemberUpdateDTO() {
         return MemberUpdateDTO.builder()
-                .memberId(this.memberId)
+                .memberId(this.id)
                 .email(this.email)
                 .password(this.password)
                 .username(this.username)
@@ -80,11 +81,21 @@ public class Member extends BaseTimeEntity implements UserDetails {
 
     public MemberLoginDTO toMemberLoginDTO() {
         return MemberLoginDTO.builder()
-                .memberId(this.memberId)
+                .memberId(this.id)
                 .email(this.email)
                 .password(this.password)
                 .username(this.username)
                 .role(this.roles.name())
+                .build();
+    }
+
+    public MemberInfoDTO toMemberInfoDTO() {
+        return MemberInfoDTO.builder()
+                .memberId(this.id)
+                .email(this.email)
+                .password(this.password)
+                .username(this.username)
+                .role(this.roles.toString())
                 .build();
     }
 

@@ -2,6 +2,7 @@ package jhcode.blog.board;
 
 import jakarta.persistence.*;
 import jhcode.blog.board.dto.BoardDTO;
+import jhcode.blog.board.dto.BoardInfoDTO;
 import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.member.Member;
@@ -75,6 +76,17 @@ public class Board extends BaseTimeEntity {
                 .viewCount(this.viewCount)
                 .category(this.category)
                 .member(this.member)
+                .build();
+    }
+
+    public BoardInfoDTO toBoardInfoDTO() {
+        return BoardInfoDTO.builder()
+                .boardId(this.id)
+                .title(this.title)
+                .content(this.content)
+                .viewCount(this.viewCount)
+                .category(this.category)
+                .member(this.member.toMemberInfoDTO())
                 .build();
     }
 }

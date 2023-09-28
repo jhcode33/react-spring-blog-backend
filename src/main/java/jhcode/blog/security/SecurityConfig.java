@@ -39,7 +39,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize
                         -> authorize
                         .requestMatchers("/board/list", "/board/search", "/user/register", "/user/login").permitAll()
-                        .requestMatchers("/board/**").hasRole("USER"))
+                        .requestMatchers("/board/**").hasRole("USER")
+                        .requestMatchers("/board/{boardId}/comment/**").hasRole("USER"))
 
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
