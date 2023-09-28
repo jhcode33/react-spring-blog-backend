@@ -2,14 +2,18 @@ package jhcode.blog.board;
 
 import jakarta.persistence.*;
 import jhcode.blog.board.dto.BoardDTO;
+import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
+@Getter
 @NoArgsConstructor
 public class Board extends BaseTimeEntity {
 
@@ -28,8 +32,11 @@ public class Board extends BaseTimeEntity {
     private String category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "MEMBER_ID")
     public Member member;
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    public List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Board(Long id, String title, String content, int viewCount, String category, Member member) {
