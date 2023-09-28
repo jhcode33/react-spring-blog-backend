@@ -40,8 +40,8 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role roles;
 
-    @OneToMany(mappedBy = "member")
-    public List<Board> boards = new ArrayList<>();
+//    @OneToMany(mappedBy = "member")
+//    public List<Board> boards = new ArrayList<>();
 
 
     //========== 생성자 Builder ============//

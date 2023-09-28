@@ -38,14 +38,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize
                         -> authorize
-                        .requestMatchers("/user/register", "/user/login").permitAll())
-//                .authorizeHttpRequests(auth ->
-//                        auth.requestMatchers("/user/register")
-//
-//
-//                    auth.requestMatchers(
-//                        new AntPathRequestMatcher("/user/register", "/user/login")).permitAll()
-//                            .anyRequest().authenticated())
+                        .requestMatchers("/user/register", "/user/login").permitAll()
+                        .requestMatchers("/board/write").hasRole("USER"))
 
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

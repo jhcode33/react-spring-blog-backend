@@ -1,6 +1,7 @@
 package jhcode.blog.board;
 
 import jakarta.persistence.*;
+import jhcode.blog.board.dto.BoardDTO;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.member.Member;
 import lombok.Builder;
@@ -26,7 +27,7 @@ public class Board extends BaseTimeEntity {
 
     private String category;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId")
     public Member member;
 
@@ -38,5 +39,23 @@ public class Board extends BaseTimeEntity {
         this.viewCount = viewCount;
         this.category = category;
         this.member = member;
+    }
+
+    //== Member & Board 연관관계 편의 메소드 ==//
+    public void setMappingMember(Member member) {
+        this.member = member;
+        //member.getBoards().add(this);
+    }
+
+    //== DTO ==//
+    public BoardDTO toBoardDTO() {
+        return BoardDTO.builder()
+                .boardId(this.id)
+                .title(this.title)
+                .content(this.content)
+                .viewCount(this.viewCount)
+                .category(this.category)
+                .member(this.member)
+                .build();
     }
 }
