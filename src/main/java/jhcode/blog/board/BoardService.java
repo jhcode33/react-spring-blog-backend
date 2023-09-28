@@ -21,7 +21,7 @@ public class BoardService {
 
     // 페이징 리스트
     public Page<Board> getAllBoards(Pageable pageable) {
-        Page<Board> boards = boardRepository.findAllWithMember(pageable);
+        Page<Board> boards = boardRepository.findAllWithMemberAndComments(pageable);
         return boards;
     }
 

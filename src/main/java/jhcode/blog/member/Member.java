@@ -79,13 +79,14 @@ public class Member extends BaseTimeEntity implements UserDetails {
                 .build();
     }
 
-    public MemberLoginDTO toMemberLoginDTO() {
+    public MemberLoginDTO toMemberLoginDTO(String token) {
         return MemberLoginDTO.builder()
                 .memberId(this.id)
                 .email(this.email)
                 .password(this.password)
                 .username(this.username)
                 .role(this.roles.name())
+                .token(token)
                 .build();
     }
 

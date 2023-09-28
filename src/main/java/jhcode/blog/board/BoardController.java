@@ -39,7 +39,7 @@ public class BoardController {
 
     @PostMapping("/write")
     public ResponseEntity<BoardDTO> write(@RequestBody BoardDTO boardDTO,
-    @AuthenticationPrincipal Member member) {
+                                          @AuthenticationPrincipal Member member) {
         BoardDTO saveBoardDTO = boardService.write(boardDTO, member);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardDTO);
     }

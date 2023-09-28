@@ -20,21 +20,13 @@ public class MemberLoginDTO {
     private String token;
 
     @Builder
-    public MemberLoginDTO(Long memberId, String email, String password, String passwordConfirmation, String username, String role) {
+    public MemberLoginDTO(Long memberId, String email, String password, String passwordConfirmation, String username, String role, String token) {
         this.memberId = memberId;
         this.email = email;
         this.password = password;
         this.passwordConfirmation = passwordConfirmation;
         this.username = username;
         this.role = role;
-    }
-
-    public Member toMemberEntity() {
-        return Member.builder()
-                .email(this.email)
-                .password(this.password)
-                .username(this.username)
-                .roles(Role.USER)
-                .build();
+        this.token = token;
     }
 }

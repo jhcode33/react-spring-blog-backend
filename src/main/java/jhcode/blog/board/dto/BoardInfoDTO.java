@@ -1,6 +1,5 @@
 package jhcode.blog.board.dto;
 
-import jhcode.blog.member.Member;
 import jhcode.blog.member.dto.MemberInfoDTO;
 import lombok.Builder;
 import lombok.Getter;
