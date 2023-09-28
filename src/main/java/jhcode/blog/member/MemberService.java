@@ -57,7 +57,7 @@ public class MemberService {
             Member member = memberRepository.findByEmail(memberLoginDTO.getEmail()).orElseThrow(
                     () -> new ResourceNotFoundException("Member", "Member Email", memberLoginDTO.getEmail())
             );
-            String token = "Bearer " + jwtTokenUtil.generateToken(member);
+            String token = jwtTokenUtil.generateToken(member);
             MemberLoginDTO loginDTO = member.toMemberLoginDTO();
             loginDTO.setToken(token);
             return loginDTO;
