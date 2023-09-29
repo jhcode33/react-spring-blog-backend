@@ -7,12 +7,17 @@ import jhcode.blog.common.exception.ResourceNotFoundException;
 import jhcode.blog.file.dto.FileDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.PathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
@@ -65,5 +70,15 @@ public class FileService {
 
         // File Entity 저장 및 DTO로 반환 받아 전송
         return fileRepository.save(saveFile).toDTO();
+    }
+
+    public byte[] download(Long boardId, String fileName) throws IOException {
+        FileEntity file = fileRepository.findByOriginFileName(fileName).orElseThrow(
+                () -> new FileNotFoundException()
+        );
+        String filePath = FOLDER_PATH + file.getFilePath();
+
+        return Files.readAllBytes(new File(filePath).toPath());
+
     }
 }

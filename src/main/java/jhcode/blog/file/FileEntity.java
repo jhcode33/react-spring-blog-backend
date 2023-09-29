@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "FILE")
 @Getter
 @NoArgsConstructor
 public class FileEntity extends BaseTimeEntity {
