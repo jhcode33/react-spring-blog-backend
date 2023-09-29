@@ -6,6 +6,7 @@ import jhcode.blog.board.dto.BoardInfoDTO;
 import jhcode.blog.board.dto.BoardListDTO;
 import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
+import jhcode.blog.file.FileEntity;
 import jhcode.blog.member.Member;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,6 +41,9 @@ public class Board extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
     public List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    public List<FileEntity> files = new ArrayList<>();
 
     @Builder
     public Board(Long id, String title, String content, int viewCount, String category, Member member) {
