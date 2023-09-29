@@ -5,9 +5,8 @@ import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.common.Role;
 import jhcode.blog.member.dto.MemberInfoDTO;
-import jhcode.blog.member.dto.MemberLoginDTO;
-import jhcode.blog.member.dto.MemberRegisterDTO;
-import jhcode.blog.member.dto.MemberUpdateDTO;
+import jhcode.blog.member.dto.request.MemberLoginDto;
+import jhcode.blog.member.dto.request.MemberUpdateDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,32 +60,18 @@ public class Member extends BaseTimeEntity implements UserDetails {
     }
 
     //========== to DTO ==========//
-    public MemberRegisterDTO toMemberRegisterDTO() {
-        return MemberRegisterDTO.builder()
-                .memberId(this.id)
+    public MemberUpdateDto toMemberUpdateDTO() {
+        return MemberUpdateDto.builder()
                 .email(this.email)
                 .password(this.password)
                 .username(this.username)
                 .build();
     }
 
-    public MemberUpdateDTO toMemberUpdateDTO() {
-        return MemberUpdateDTO.builder()
-                .memberId(this.id)
+    public MemberLoginDto toMemberLoginDTO(String token) {
+        return MemberLoginDto.builder()
                 .email(this.email)
                 .password(this.password)
-                .username(this.username)
-                .build();
-    }
-
-    public MemberLoginDTO toMemberLoginDTO(String token) {
-        return MemberLoginDTO.builder()
-                .memberId(this.id)
-                .email(this.email)
-                .password(this.password)
-                .username(this.username)
-                .role(this.roles.name())
-                .token(token)
                 .build();
     }
 

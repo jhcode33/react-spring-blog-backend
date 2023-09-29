@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize
                         -> authorize
                         .requestMatchers("/board/list", "/board/search", "/user/register", "/user/login").permitAll()
+                        .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers("/board/**").hasRole("USER")
                         .requestMatchers("/board/{boardId}/comment/**").hasRole("USER")
                         .requestMatchers("/board/{boardId}/file/**").hasRole("USER"))
