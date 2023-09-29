@@ -29,16 +29,6 @@ public class MemberService {
         }
     }
 
-    private Boolean checkPassword(String password, String passwordConfirmation) {
-        if (password.equals(passwordConfirmation)) {
-            log.info("패스워드 일치");
-            return true;
-        } else {
-            log.info("패스워드 불일치");
-            return false;
-        }
-    }
-
     public MemberUpdateDTO update(MemberUpdateDTO memberUpdateDTO) {
         if (checkPassword(memberUpdateDTO.getPassword(), memberUpdateDTO.getPasswordConfirmation())) {
             Member updateMember = memberRepository.findByEmail(memberUpdateDTO.getEmail()).orElseThrow(
@@ -58,13 +48,20 @@ public class MemberService {
                     () -> new ResourceNotFoundException("Member", "Member Email", memberLoginDTO.getEmail())
             );
             String token = jwtTokenUtil.generateToken(member);
-            MemberLoginDTO loginDTO = member.toMemberLoginDTO();
-            loginDTO.setToken(token);
-            return loginDTO;
-
+            return member.toMemberLoginDTO(token);
         } else {
             log.info("Token 생성 실패");
             return null;
+        }
+    }
+
+    private Boolean checkPassword(String password, String passwordConfirmation) {
+        if (password.equals(passwordConfirmation)) {
+            log.info("패스워드 일치");
+            return true;
+        } else {
+            log.info("패스워드 불일치");
+            return false;
         }
     }
 }

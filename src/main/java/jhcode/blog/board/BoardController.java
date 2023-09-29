@@ -1,6 +1,7 @@
 package jhcode.blog.board;
 
 import jhcode.blog.board.dto.BoardDTO;
+import jhcode.blog.board.dto.BoardListDTO;
 import jhcode.blog.board.dto.SearchData;
 import jhcode.blog.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -22,24 +23,24 @@ public class BoardController {
 
     // 페이징 목록
     @GetMapping("/list")
-    public ResponseEntity<Page<Board>> boardList(
+    public ResponseEntity<Page<BoardListDTO>> boardList(
             @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Board> listDTO = boardService.getAllBoards(pageable);
+        Page<BoardListDTO> listDTO = boardService.getAllBoards(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(listDTO);
     }
 
     // 페이징 검색
     @GetMapping("/search")
-    public ResponseEntity<Page<Board>> search(
+    public ResponseEntity<Page<BoardListDTO>> search(
             @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestBody SearchData searchData) {
-        Page<Board> searchBoard = boardService.search(searchData, pageable);
+        Page<BoardListDTO> searchBoard = boardService.search(searchData, pageable);
         return  ResponseEntity.status(HttpStatus.OK).body(searchBoard);
     }
 
     @PostMapping("/write")
     public ResponseEntity<BoardDTO> write(@RequestBody BoardDTO boardDTO,
-    @AuthenticationPrincipal Member member) {
+                                          @AuthenticationPrincipal Member member) {
         BoardDTO saveBoardDTO = boardService.write(boardDTO, member);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardDTO);
     }

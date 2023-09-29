@@ -26,13 +26,4 @@ public class MemberUpdateDTO {
         this.passwordConfirmation = passwordConfirmation;
         this.username = username;
     }
-
-    public Member toMemberEntity() {
-        return Member.builder()
-                .email(this.email)
-                .password(this.password)
-                .username(this.username)
-                .roles(Role.USER)
-                .build();
-    }
 }
