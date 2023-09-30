@@ -8,7 +8,8 @@ import lombok.Setter;
 
 /**
  * -Request-
- * 댓글 등록, 수정 요청, Member, Board는 URI Resource로 받음
+ * 댓글 등록, 수정 요청, <br>
+ * -Member, Board는 URI Resource로 받음
  */
 
 @Getter

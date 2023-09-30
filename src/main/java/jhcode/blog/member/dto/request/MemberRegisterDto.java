@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * -Request-
  * 회원 가입 요청 dto
  */
 @Getter

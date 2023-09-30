@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * -Request-
  * 회원 정보 변경 요청 dto
  */
 
@@ -26,14 +27,5 @@ public class MemberUpdateDto {
         this.password = password;
         this.passwordCheck = passwordCheck;
         this.username = username;
-    }
-
-    // DTO -> Entity
-    public static Member ofEntity(MemberUpdateDto dto) {
-        return Member.builder()
-                .email(dto.email)
-                .password(dto.password)
-                .username(dto.username)
-                .build();
     }
 }

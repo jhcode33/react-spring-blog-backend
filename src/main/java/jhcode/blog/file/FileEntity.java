@@ -3,7 +3,6 @@ package jhcode.blog.file;
 import jakarta.persistence.*;
 import jhcode.blog.board.Board;
 import jhcode.blog.common.BaseTimeEntity;
-import jhcode.blog.file.dto.FileDTO;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

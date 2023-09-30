@@ -1,14 +1,16 @@
 package jhcode.blog.board.dto.response;
 
 import jhcode.blog.board.Board;
-import jhcode.blog.comment.dto.request.CommentDto;
-import jhcode.blog.file.dto.FileDTO;
+import jhcode.blog.comment.dto.response.ResCommentDto;
+import jhcode.blog.file.dto.response.ResBoardDetailsFileDto;
+import jhcode.blog.file.dto.response.ResFileUploadDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * -Response-
@@ -30,13 +32,13 @@ public class ResBoardDetailsDto {
     private String modifiedDate;
 
     // comments
-    private List<CommentDto> comments;
+    private List<ResCommentDto> comments;
 
     // file
-    private List<FileDTO> files;
+    private List<ResBoardDetailsFileDto> files;
 
     @Builder
-    public ResBoardDetailsDto(Long boardId, String title, String content, String category, String writerName, String createdDate, String modifiedDate, List<CommentDto> comments, List<FileDTO> files) {
+    public ResBoardDetailsDto(Long boardId, String title, String content, String category, String writerName, String createdDate, String modifiedDate, List<ResCommentDto> comments, List<ResBoardDetailsFileDto> files) {
         this.boardId = boardId;
         this.title = title;
         this.content = content;
@@ -56,8 +58,12 @@ public class ResBoardDetailsDto {
                 .writerName(board.getMember().getUsername())
                 .createdDate(board.getCreateDate().toString())
                 .modifiedDate(board.getModifiedDate().toString())
-                // comments -> 파일 스트림으로 dto로 변환해야함
-                // files -> 파일 스트림으로 dto로 변환해야함
+                .comments(board.getComments().stream()
+                        .map(ResCommentDto::fromEntity)
+                        .collect(Collectors.toList()))
+                .files(board.getFiles().stream()
+                        .map(ResBoardDetailsFileDto::fromEntity)
+                        .collect(Collectors.toList()))
                 .build();
     }
 }

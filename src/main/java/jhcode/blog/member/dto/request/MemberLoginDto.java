@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * -Request-
  * 로그인 요청 dto
  */
 @Getter

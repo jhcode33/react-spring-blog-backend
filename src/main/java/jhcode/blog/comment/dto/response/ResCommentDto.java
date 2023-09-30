@@ -31,7 +31,7 @@ public class ResCommentDto {
         this.commentWriterName = commentWriterName;
     }
 
-    public static ResCommentDto fromComment(Comment comment) {
+    public static ResCommentDto fromEntity(Comment comment) {
         return ResCommentDto.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())

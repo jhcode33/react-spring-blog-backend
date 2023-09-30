@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.common.Role;
-import jhcode.blog.member.dto.MemberInfoDTO;
-import jhcode.blog.member.dto.request.MemberLoginDto;
-import jhcode.blog.member.dto.request.MemberUpdateDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +17,7 @@ import java.util.List;
 
 @Getter
 @Entity
-@NoArgsConstructor // 기본 생성자
+@NoArgsConstructor
 public class Member extends BaseTimeEntity implements UserDetails {
 
     @Id @GeneratedValue
@@ -44,7 +41,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     public List<Comment> comments = new ArrayList<>();
 
 
-    //========== 생성자 Builder ============//
+    //== 생성자 Builder ==//
     @Builder
     public Member(String email, String password, String username, Role roles) {
         this.email = email;
@@ -53,40 +50,13 @@ public class Member extends BaseTimeEntity implements UserDetails {
         this.roles = roles;
     }
 
-    //========== Dirty Checking ===========//
+    //== update ==//
     public void update(String password, String username) {
         this.password = password;
         this.username = username;
     }
 
-    //========== to DTO ==========//
-    public MemberUpdateDto toMemberUpdateDTO() {
-        return MemberUpdateDto.builder()
-                .email(this.email)
-                .password(this.password)
-                .username(this.username)
-                .build();
-    }
-
-    public MemberLoginDto toMemberLoginDTO(String token) {
-        return MemberLoginDto.builder()
-                .email(this.email)
-                .password(this.password)
-                .build();
-    }
-
-    public MemberInfoDTO toMemberInfoDTO() {
-        return MemberInfoDTO.builder()
-                .memberId(this.id)
-                .email(this.email)
-                .password(this.password)
-                .username(this.username)
-                .role(this.roles.toString())
-                .build();
-    }
-
     //========== UserDetails implements ==========//
-
     /**
      * Token을 고유한 Email 값으로 생성합니다
      * @return email;

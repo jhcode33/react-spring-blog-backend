@@ -33,7 +33,7 @@ public class CommentService {
         comment.setMember(commentWriter);
 
         Comment saveComment = commentRepository.save(comment);
-        return ResCommentDto.fromComment(saveComment);
+        return ResCommentDto.fromEntity(saveComment);
     }
 
     public ResCommentDto update(Long commentId, CommentDto commentDto) {
@@ -41,7 +41,7 @@ public class CommentService {
                 () -> new ResourceNotFoundException("Comment", "Comment Id", String.valueOf(commentId))
         );
         comment.update(commentDto.getContent());
-        return ResCommentDto.fromComment(comment);
+        return ResCommentDto.fromEntity(comment);
     }
 
     public void delete(Long commentId) {
