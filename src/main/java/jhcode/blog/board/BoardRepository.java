@@ -9,9 +9,11 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
+    // 게시글 상세 조회
     @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments JOIN FETCH b.files WHERE b.id = :boardID")
     Optional<Board> findByIdWithMemberAndCommentsAndFiles(Long boardID);
 
+    // 첫 페이징 화면("/")
     @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments")
     Page<Board> findAllWithMemberAndComments(Pageable pageable);
 

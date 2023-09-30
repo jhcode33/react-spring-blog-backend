@@ -62,13 +62,13 @@ public class BoardService {
 
     // 게시글 상세보기
     // comment, file 추가되면 JPQL로 변경해야함 -> 전체 데이터를 한방에 가져올 수 있도록
-    public BoardWriteDto detail(Long boardId) {
+    public ResBoardDetailsDto detail(Long boardId) {
        Board findBoard = boardRepository.findByIdWithMemberAndCommentsAndFiles(boardId).orElseThrow(
                () -> new ResourceNotFoundException("Board", "Board Id", String.valueOf(boardId))
        );
        // 조회수 증가
        findBoard.upViewCount();
-       return findBoard.toBoardDTO();
+       return ResBoardDetailsDto.fromEntity(findBoard);
     }
 
     // 게시글 수정

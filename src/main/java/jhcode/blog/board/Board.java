@@ -1,9 +1,6 @@
 package jhcode.blog.board;
 
 import jakarta.persistence.*;
-import jhcode.blog.board.dto.request.BoardWriteDto;
-import jhcode.blog.board.dto.BoardInfoDTO;
-import jhcode.blog.board.dto.response.ResBoardListDto;
 import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.file.FileEntity;
@@ -14,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter

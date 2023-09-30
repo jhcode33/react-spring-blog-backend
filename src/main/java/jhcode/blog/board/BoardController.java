@@ -49,8 +49,8 @@ public class BoardController {
     }
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<BoardWriteDto> detail(@PathVariable("boardId") Long boardId) {
-        BoardWriteDto findBoardDTO = boardService.detail(boardId);
+    public ResponseEntity<ResBoardDetailsDto> detail(@PathVariable("boardId") Long boardId) {
+        ResBoardDetailsDto findBoardDTO = boardService.detail(boardId);
         return ResponseEntity.status(HttpStatus.OK).body(findBoardDTO);
     }
 
