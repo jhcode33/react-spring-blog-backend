@@ -37,17 +37,12 @@ public class FileEntity extends BaseTimeEntity {
         this.fileType = fileType;
     }
 
-    public FileDTO toDTO() {
-        return FileDTO.builder()
-                .id(this.id)
-                .originFileName(this.originFileName)
-                .filePath(this.filePath)
-                .fileType(this.fileType)
-                .build();
-    }
-
     public void setMappingBoard(Board board) {
         this.board = board;
         board.getFiles().add(this);
+    }
+
+    public void delete() {
+        this.board.getFiles().remove(this);
     }
 }

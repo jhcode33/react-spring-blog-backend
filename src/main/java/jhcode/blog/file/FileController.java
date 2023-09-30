@@ -31,7 +31,7 @@ public class FileController {
     }
 
     @GetMapping("/download")
-    public ResponseEntity<Resource> download  (
+    public ResponseEntity<Resource> download (
             @RequestParam("fileId") Long fileId) throws IOException {
         byte[] downloadFile = fileService.download(fileId);
 
@@ -39,5 +39,12 @@ public class FileController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileId=\"" + fileId + "\"")
                 .body(new ByteArrayResource(downloadFile));
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Long> delete (
+            @RequestParam("fileId") Long fileId) {
+        fileService.delete(fileId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

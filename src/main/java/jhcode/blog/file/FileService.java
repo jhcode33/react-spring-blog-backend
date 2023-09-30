@@ -45,7 +45,7 @@ public class FileService {
                 "POST_" + board.getId() + "_" + randomId.concat(fileName.substring(fileName.indexOf(".")));
 
         // File.separator : OS에 따른 구분자
-        String fileResource = FOLDER_PATH + File.separator + filePath;
+        String fileResourcePath = FOLDER_PATH + File.separator + filePath;
 
         // create folder if not created
         File f = new File(FOLDER_PATH);
@@ -54,7 +54,7 @@ public class FileService {
         }
 
         // file copy in folder
-        Files.copy(multipartFile.getInputStream(), Paths.get(fileResource));
+        Files.copy(multipartFile.getInputStream(), Paths.get(fileResourcePath));
 
         // create File Entity & 연관관게 매핑
         FileEntity saveFile = FileEntity.builder()
@@ -76,6 +76,22 @@ public class FileService {
         String filePath = FOLDER_PATH + file.getFilePath();
 
         return Files.readAllBytes(new File(filePath).toPath());
+    }
 
+    public void delete(Long fileId) {
+        FileEntity file = fileRepository.findById(fileId).orElseThrow(
+                () -> new ResourceNotFoundException("File", "File Id", String.valueOf(fileId))
+        );
+
+        // local 파일을 삭제
+        String filePath = FOLDER_PATH + File.separator + file.getFilePath();
+        File physicalFile = new File(filePath);
+        if (physicalFile.exists()) {
+            physicalFile.delete();
+        }
+
+        // 연관관계 & DB 삭제
+        file.delete();
+        fileRepository.delete(file);
     }
 }

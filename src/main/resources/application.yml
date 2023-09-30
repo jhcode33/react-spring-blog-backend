@@ -13,9 +13,9 @@ spring:
     properties:
       hibernate:
         hibernate:
-        "[format_sql]": true            #SQL ??
-        "[user_sql_comments]": true     #SQL ?? ??
-        "[highlight_sql]": true         #SQL ??
+        "[format_sql]": true            #SQL 보기 좋게 출력
+        "[user_sql_comments]": true     #SQL 생성시 주석 포함
+        "[highlight_sql]": true         #SQL 색깔
         "[hbm2ddl.auto]": update
     open-in-view: true
     show-sql: true
