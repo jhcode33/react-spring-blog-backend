@@ -1,7 +1,7 @@
 package jhcode.blog.board.dto.response;
 
 import jhcode.blog.board.Board;
-import jhcode.blog.comment.dto.CommentDTO;
+import jhcode.blog.comment.dto.request.CommentDto;
 import jhcode.blog.file.dto.FileDTO;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +21,7 @@ import java.util.List;
 public class ResBoardDetailsDto {
 
     // board info
+    private Long boardId;
     private String title;
     private String content;
     private String category;
@@ -29,13 +30,14 @@ public class ResBoardDetailsDto {
     private String modifiedDate;
 
     // comments
-    private List<CommentDTO> comments;
+    private List<CommentDto> comments;
 
     // file
     private List<FileDTO> files;
 
     @Builder
-    public ResBoardDetailsDto(String title, String content, String category, String writerName, String createdDate, String modifiedDate, List<CommentDTO> comments, List<FileDTO> files) {
+    public ResBoardDetailsDto(Long boardId, String title, String content, String category, String writerName, String createdDate, String modifiedDate, List<CommentDto> comments, List<FileDTO> files) {
+        this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.category = category;

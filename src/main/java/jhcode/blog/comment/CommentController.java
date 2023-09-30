@@ -1,7 +1,8 @@
 package jhcode.blog.comment;
 
-import jhcode.blog.comment.dto.CommentDTO;
 import jhcode.blog.comment.dto.CommentInfoDTO;
+import jhcode.blog.comment.dto.request.CommentDto;
+import jhcode.blog.comment.dto.response.ResCommentDto;
 import jhcode.blog.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,18 +18,18 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/write")
-    public ResponseEntity<CommentInfoDTO> write(
+    public ResponseEntity<ResCommentDto> write(
             @AuthenticationPrincipal Member member,
             @PathVariable Long boardId,
-            @RequestBody CommentDTO commentDTO) {
-        CommentInfoDTO saveCommentDTO = commentService.write(boardId, member, commentDTO);
+            @RequestBody CommentDto commentWriteDto) {
+        ResCommentDto saveCommentDTO = commentService.write(boardId, member, commentWriteDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveCommentDTO);
     }
 
     @PutMapping("/update")
     public ResponseEntity<CommentInfoDTO> update(
             @AuthenticationPrincipal Member member,
-            @RequestBody CommentDTO commentDTO) {
+            @RequestBody CommentDto commentDTO) {
         CommentInfoDTO updateCommentDTO = commentService.update(member, commentDTO);
         return ResponseEntity.status(HttpStatus.OK).body(updateCommentDTO);
     }

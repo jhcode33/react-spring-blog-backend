@@ -18,6 +18,7 @@ public class ResBoardListDto {
     // DB 인덱스를 Client가 알 필요는 없다고 생각
     // 작성일, 수정일, 작성자, 댓글 개수만 전체 목록에 대한 데이터로 받으면 됨
     // 상세한 댓글 내용 등은 상세보기에서 처리
+    private Long boardId;
     private String title;
     private String content;
     private int viewCount;
@@ -28,7 +29,8 @@ public class ResBoardListDto {
     private int commentCount;
 
     @Builder
-    public ResBoardListDto(String title, String content, int viewCount, String category, String createdDate, String modifiedDate, String writerName, int commentCount) {
+    public ResBoardListDto(Long boardId, String title, String content, int viewCount, String category, String createdDate, String modifiedDate, String writerName, int commentCount) {
+        this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
@@ -42,6 +44,7 @@ public class ResBoardListDto {
     // Entity -> DTO
     public static ResBoardListDto fromEntity(Board board) {
         return ResBoardListDto.builder()
+                .boardId(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .viewCount(board.getViewCount())

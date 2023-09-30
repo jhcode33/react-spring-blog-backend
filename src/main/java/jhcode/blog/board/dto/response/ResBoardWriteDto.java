@@ -16,6 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ResBoardWriteDto {
 
+    private Long boardId;
     private String title;
     private String content;
     private String category;
@@ -23,7 +24,8 @@ public class ResBoardWriteDto {
     private String createdDate;
 
     @Builder
-    public ResBoardWriteDto(String title, String content, String category, String writerName, String createdDate) {
+    public ResBoardWriteDto(Long boardId, String title, String content, String category, String writerName, String createdDate) {
+        this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.category = category;
@@ -33,6 +35,7 @@ public class ResBoardWriteDto {
 
     public static ResBoardWriteDto fromEntity(Board board) {
         return ResBoardWriteDto.builder()
+                .boardId(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .category(board.getCategory())

@@ -2,7 +2,6 @@ package jhcode.blog.comment;
 
 import jakarta.persistence.*;
 import jhcode.blog.board.Board;
-import jhcode.blog.comment.dto.CommentDTO;
 import jhcode.blog.comment.dto.CommentInfoDTO;
 import jhcode.blog.comment.dto.CommentsDTO;
 import jhcode.blog.common.BaseTimeEntity;

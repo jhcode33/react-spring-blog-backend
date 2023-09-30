@@ -17,13 +17,13 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     // 제목 검색
     @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments WHERE b.title LIKE %:title%")
-    Page<Board> findByTitleContaining(String title, Pageable pageable);
+    Page<Board> findAllTitleContaining(String title, Pageable pageable);
 
     // 내용 검색
     @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments WHERE b.content LIKE %:content%")
-    Page<Board> findByContentContaining(String content, Pageable pageable);
+    Page<Board> findAllContentContaining(String content, Pageable pageable);
 
     // 작성자 검색
     @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments WHERE b.member.username LIKE %:username%")
-    Page<Board> findByUsernameContaining(String username, Pageable pageable);
+    Page<Board> findAllUsernameContaining(String username, Pageable pageable);
 }
