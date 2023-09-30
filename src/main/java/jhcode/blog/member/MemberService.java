@@ -52,6 +52,12 @@ public class MemberService {
         return MemberTokenDto.fromEntity(member, token);
     }
 
+    public MemberResponseDto check(Member member, String password) {
+        Member checkMember = (Member) userDetailsService.loadUserByUsername(member.getEmail());
+        checkEncodePassword(checkMember.getPassword(), member.getPassword());
+        return MemberResponseDto.fromEntity(checkMember);
+    }
+
     public MemberResponseDto update(MemberUpdateDto updateDto) {
         checkPassword(updateDto.getPassword(), updateDto.getPasswordCheck());
         String encodePwd = encoder.encode(updateDto.getPassword());

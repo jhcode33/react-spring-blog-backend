@@ -8,6 +8,7 @@ import jhcode.blog.member.dto.response.MemberTokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,13 +30,13 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).header(loginDTO.getToken()).body(loginDTO);
     }
 
-//    @PostMapping("/check")
-//    public ResponseEntity<MemberResponseDto> check(
-//            @AuthenticationPrincipal Member member,
-//            @RequestParam("password") String password) {
-//        MemberResponseDto memberInfo = memberService.check(member, password);
-//        return ResponseEntity.status(HttpStatus.OK).body(memberInfo);
-//    }
+    @PostMapping("/check")
+    public ResponseEntity<MemberResponseDto> check(
+            @AuthenticationPrincipal Member member,
+            @RequestParam("password") String password) {
+        MemberResponseDto memberInfo = memberService.check(member, password);
+        return ResponseEntity.status(HttpStatus.OK).body(memberInfo);
+    }
 
     @PutMapping("/update")
     public ResponseEntity<MemberResponseDto> update(@RequestBody MemberUpdateDto memberUpdateDTO) {
