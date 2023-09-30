@@ -1,13 +1,19 @@
 package jhcode.blog.member;
 
 import jakarta.transaction.Transactional;
+import jhcode.blog.common.exception.MemberException;
 import jhcode.blog.common.exception.ResourceNotFoundException;
-import jhcode.blog.member.dto.MemberLoginDTO;
-import jhcode.blog.member.dto.MemberRegisterDTO;
-import jhcode.blog.member.dto.MemberUpdateDTO;
+import jhcode.blog.member.dto.request.MemberLoginDto;
+import jhcode.blog.member.dto.request.MemberRegisterDto;
+import jhcode.blog.member.dto.request.MemberUpdateDto;
+import jhcode.blog.member.dto.response.MemberResponseDto;
+import jhcode.blog.member.dto.response.MemberTokenDto;
+import jhcode.blog.security.jwt.CustomUserDetailsService;
 import jhcode.blog.security.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,52 +22,72 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MemberService {
 
+    private final PasswordEncoder encoder;
     private final MemberRepository memberRepository;
+    private final CustomUserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
 
-    public MemberRegisterDTO register(MemberRegisterDTO memberRegisterDTO) {
-        if (checkPassword(memberRegisterDTO.getPassword(), memberRegisterDTO.getPasswordConfirmation())) {
-            Member saveMember = memberRepository.save(memberRegisterDTO.toMemberEntity());
-            return saveMember.toMemberRegisterDTO();
-        } else {
-            log.info("회원 가입 실패");
-            return null;
+    public MemberResponseDto register(MemberRegisterDto registerDto) {
+        // 이메일 확인
+        isExistUserEmail(registerDto.getEmail());
+
+        // 패스워드 일치 확인
+        checkPassword(registerDto.getPassword(), registerDto.getPasswordCheck());
+
+        // 패스워드 암호화
+        String encodePwd = encoder.encode(registerDto.getPassword());
+        registerDto.setPassword(encodePwd);
+
+        Member saveMember = memberRepository.save(
+                MemberRegisterDto.ofEntity(registerDto));
+
+        return MemberResponseDto.fromEntity(saveMember);
+    }
+
+
+    public MemberTokenDto login(MemberLoginDto loginDTO) {
+        Member member = (Member) userDetailsService.loadUserByUsername(loginDTO.getEmail());
+        checkEncodePassword(loginDTO.getPassword(), member.getPassword());
+        String token = jwtTokenUtil.generateToken(member);
+        return MemberTokenDto.fromEntity(member, token);
+    }
+
+    public MemberResponseDto check(Member member, String password) {
+        Member checkMember = (Member) userDetailsService.loadUserByUsername(member.getEmail());
+        checkEncodePassword(password, checkMember.getPassword());
+        return MemberResponseDto.fromEntity(checkMember);
+    }
+
+    public MemberResponseDto update(Member member, MemberUpdateDto updateDto) {
+        checkPassword(updateDto.getPassword(), updateDto.getPasswordCheck());
+        String encodePwd = encoder.encode(updateDto.getPassword());
+
+        Member updateMember = findByEmail(member.getEmail());
+        updateMember.update(encodePwd, updateDto.getUsername());
+        return MemberResponseDto.fromEntity(updateMember);
+    }
+
+    private void isExistUserEmail(String email) {
+        if (memberRepository.findByEmail(email).isPresent()) {
+            throw new MemberException("이미 사용 중인 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
     }
 
-    public MemberUpdateDTO update(MemberUpdateDTO memberUpdateDTO) {
-        if (checkPassword(memberUpdateDTO.getPassword(), memberUpdateDTO.getPasswordConfirmation())) {
-            Member updateMember = memberRepository.findByEmail(memberUpdateDTO.getEmail()).orElseThrow(
-                    () -> new ResourceNotFoundException("Member", "Member Email", memberUpdateDTO.getEmail())
-            );
-            updateMember.update(memberUpdateDTO.getPassword(), memberUpdateDTO.getUsername());
-            return updateMember.toMemberUpdateDTO();
-        } else {
-            log.info("비밀번호 불일치");
-            return null;
+    private void checkPassword(String password, String passwordCheck) {
+        if (!password.equals(passwordCheck)) {
+            throw new MemberException("패스워드 불일치", HttpStatus.BAD_REQUEST);
         }
     }
 
-    public MemberLoginDTO login(MemberLoginDTO memberLoginDTO) {
-        if (checkPassword(memberLoginDTO.getPassword(), memberLoginDTO.getPasswordConfirmation())) {
-            Member member = memberRepository.findByEmail(memberLoginDTO.getEmail()).orElseThrow(
-                    () -> new ResourceNotFoundException("Member", "Member Email", memberLoginDTO.getEmail())
-            );
-            String token = jwtTokenUtil.generateToken(member);
-            return member.toMemberLoginDTO(token);
-        } else {
-            log.info("Token 생성 실패");
-            return null;
+    private void checkEncodePassword(String rawPassword, String encodedPassword) {
+        if (!encoder.matches(rawPassword, encodedPassword)) {
+            throw new MemberException("패스워드 불일치", HttpStatus.BAD_REQUEST);
         }
     }
 
-    private Boolean checkPassword(String password, String passwordConfirmation) {
-        if (password.equals(passwordConfirmation)) {
-            log.info("패스워드 일치");
-            return true;
-        } else {
-            log.info("패스워드 불일치");
-            return false;
-        }
+    private Member findByEmail(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(
+                () -> new ResourceNotFoundException("Member", "Member Email", email)
+        );
     }
 }

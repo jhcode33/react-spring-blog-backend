@@ -2,9 +2,6 @@ package jhcode.blog.comment;
 
 import jakarta.persistence.*;
 import jhcode.blog.board.Board;
-import jhcode.blog.comment.dto.CommentDTO;
-import jhcode.blog.comment.dto.CommentInfoDTO;
-import jhcode.blog.comment.dto.CommentsDTO;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.member.Member;
 import lombok.Builder;
@@ -23,12 +20,11 @@ public class Comment extends BaseTimeEntity {
 
     private String content;
 
-    // CascadeType.ALL : 댓글이 변하면 연관관계도 변한다
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     public Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
     public Board board;
 
@@ -55,33 +51,5 @@ public class Comment extends BaseTimeEntity {
     // update
     public void update(String content) {
         this.content = content;
-    }
-
-    // delete
-    public void delete() {
-        this.member.getComments().remove(this);
-        this.board.getComments().remove(this);
-    }
-
-    //== to DTO ==//
-    public CommentInfoDTO toCommentInfoDTO(String writerName) {
-        return CommentInfoDTO.builder()
-                .id(this.id)
-                .content(this.content)
-                .writerName(writerName)
-                .board(this.board.toBoardInfoDTO())
-                .createdDate(this.getCreateDate().toString())
-                .modifiedDate(this.getModifiedDate().toString())
-                .build();
-    }
-
-    public CommentsDTO toCommentInfoDTO() {
-        return CommentsDTO.builder()
-                .id(this.id)
-                .content(this.content)
-                .createdDate(this.getCreateDate().toString())
-                .modifiedDate(this.getModifiedDate().toString())
-                .member(this.member.toMemberInfoDTO())
-                .build();
     }
 }

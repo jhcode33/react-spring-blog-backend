@@ -1,9 +1,6 @@
 package jhcode.blog.board;
 
 import jakarta.persistence.*;
-import jhcode.blog.board.dto.BoardDTO;
-import jhcode.blog.board.dto.BoardInfoDTO;
-import jhcode.blog.board.dto.BoardListDTO;
 import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.file.FileEntity;
@@ -11,10 +8,10 @@ import jhcode.blog.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -39,10 +36,12 @@ public class Board extends BaseTimeEntity {
     @JoinColumn(name = "MEMBER_ID")
     public Member member;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
     public List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
     public List<FileEntity> files = new ArrayList<>();
 
     @Builder
@@ -70,41 +69,6 @@ public class Board extends BaseTimeEntity {
     //== Member & Board 연관관계 편의 메소드 ==//
     public void setMappingMember(Member member) {
         this.member = member;
-        //member.getBoards().add(this);
-    }
-
-    //== DTO ==//
-    public BoardDTO toBoardDTO() {
-        return BoardDTO.builder()
-                .boardId(this.id)
-                .title(this.title)
-                .content(this.content)
-                .viewCount(this.viewCount)
-                .category(this.category)
-                .member(this.member)
-                .build();
-    }
-
-    public BoardInfoDTO toBoardInfoDTO() {
-        return BoardInfoDTO.builder()
-                .boardId(this.id)
-                .title(this.title)
-                .content(this.content)
-                .viewCount(this.viewCount)
-                .category(this.category)
-                .member(this.member.toMemberInfoDTO())
-                .build();
-    }
-
-    public BoardListDTO toBoardListDTO() {
-        return BoardListDTO.builder()
-                .boardId(this.id)
-                .title(this.title)
-                .content(this.content)
-                .viewCount(this.viewCount)
-                .category(this.category)
-                .member(this.member.toMemberInfoDTO())
-                .comments(this.comments.stream().map(Comment::toCommentInfoDTO).collect(Collectors.toList()))
-                .build();
+        member.getBoards().add(this);
     }
 }
