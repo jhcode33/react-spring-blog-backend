@@ -61,26 +61,4 @@ public class Comment extends BaseTimeEntity {
         this.member.getComments().remove(this);
         this.board.getComments().remove(this);
     }
-
-    //== to DTO ==//
-    public CommentInfoDTO toCommentInfoDTO(String writerName) {
-        return CommentInfoDTO.builder()
-                .id(this.id)
-                .content(this.content)
-                .writerName(writerName)
-                .board(this.board.toBoardInfoDTO())
-                .createdDate(this.getCreateDate().toString())
-                .modifiedDate(this.getModifiedDate().toString())
-                .build();
-    }
-
-    public CommentsDTO toCommentInfoDTO() {
-        return CommentsDTO.builder()
-                .id(this.id)
-                .content(this.content)
-                .createdDate(this.getCreateDate().toString())
-                .modifiedDate(this.getModifiedDate().toString())
-                .member(this.member.toMemberInfoDTO())
-                .build();
-    }
 }

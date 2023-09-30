@@ -1,6 +1,5 @@
 package jhcode.blog.comment;
 
-import jhcode.blog.comment.dto.CommentInfoDTO;
 import jhcode.blog.comment.dto.request.CommentDto;
 import jhcode.blog.comment.dto.response.ResCommentDto;
 import jhcode.blog.member.Member;
@@ -21,24 +20,25 @@ public class CommentController {
     public ResponseEntity<ResCommentDto> write(
             @AuthenticationPrincipal Member member,
             @PathVariable Long boardId,
-            @RequestBody CommentDto commentWriteDto) {
-        ResCommentDto saveCommentDTO = commentService.write(boardId, member, commentWriteDto);
+            @RequestBody CommentDto commentDto) {
+
+        ResCommentDto saveCommentDTO = commentService.write(boardId, member, commentDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveCommentDTO);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<CommentInfoDTO> update(
-            @AuthenticationPrincipal Member member,
-            @RequestBody CommentDto commentDTO) {
-        CommentInfoDTO updateCommentDTO = commentService.update(member, commentDTO);
+    @PutMapping("/update/{commentId}")
+    public ResponseEntity<ResCommentDto> update(
+            @PathVariable Long commentId,
+            @RequestBody CommentDto commentDto) {
+
+        ResCommentDto updateCommentDTO = commentService.update(commentId, commentDto);
         return ResponseEntity.status(HttpStatus.OK).body(updateCommentDTO);
     }
 
     @DeleteMapping("/delete/{commentId}")
-    public ResponseEntity<Long> delete(
-            @AuthenticationPrincipal Member member,
-            @PathVariable Long commentId) {
-        commentService.delete(member, commentId);
+    public ResponseEntity<Long> delete(@PathVariable Long commentId) {
+
+        commentService.delete(commentId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

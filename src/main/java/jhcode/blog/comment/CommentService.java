@@ -2,7 +2,6 @@ package jhcode.blog.comment;
 
 import jhcode.blog.board.Board;
 import jhcode.blog.board.BoardRepository;
-import jhcode.blog.comment.dto.CommentInfoDTO;
 import jhcode.blog.comment.dto.request.CommentDto;
 import jhcode.blog.comment.dto.response.ResCommentDto;
 import jhcode.blog.common.exception.ResourceNotFoundException;
@@ -37,15 +36,15 @@ public class CommentService {
         return ResCommentDto.fromComment(saveComment);
     }
 
-    public CommentInfoDTO update(Member member, CommentDTO commentDTO) {
-        Comment comment = commentRepository.findByIdWithMemberAndBoard(commentDTO.getId()).orElseThrow(
-                () -> new ResourceNotFoundException("Comment", "Comment Id", String.valueOf(commentDTO.getId()))
+    public ResCommentDto update(Long commentId, CommentDto commentDto) {
+        Comment comment = commentRepository.findByIdWithMemberAndBoard(commentId).orElseThrow(
+                () -> new ResourceNotFoundException("Comment", "Comment Id", String.valueOf(commentId))
         );
-        comment.update(commentDTO.getContent());
-        return comment.toCommentInfoDTO(member.getUsername());
+        comment.update(commentDto.getContent());
+        return ResCommentDto.fromComment(comment);
     }
 
-    public void delete(Member member, Long commentId) {
+    public void delete(Long commentId) {
         Comment comment = commentRepository.findByIdWithMemberAndBoard(commentId).orElseThrow(
                 () -> new ResourceNotFoundException("Comment", "Comment Id", String.valueOf(commentId))
         );
