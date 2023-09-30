@@ -1,9 +1,9 @@
 package jhcode.blog.board;
 
 import jakarta.persistence.*;
-import jhcode.blog.board.dto.BoardDTO;
+import jhcode.blog.board.dto.request.BoardWriteDto;
 import jhcode.blog.board.dto.BoardInfoDTO;
-import jhcode.blog.board.dto.BoardListDTO;
+import jhcode.blog.board.dto.response.ResBoardListDto;
 import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.file.FileEntity;
@@ -70,41 +70,5 @@ public class Board extends BaseTimeEntity {
     //== Member & Board 연관관계 편의 메소드 ==//
     public void setMappingMember(Member member) {
         this.member = member;
-        //member.getBoards().add(this);
-    }
-
-    //== DTO ==//
-    public BoardDTO toBoardDTO() {
-        return BoardDTO.builder()
-                .boardId(this.id)
-                .title(this.title)
-                .content(this.content)
-                .viewCount(this.viewCount)
-                .category(this.category)
-                .member(this.member)
-                .build();
-    }
-
-    public BoardInfoDTO toBoardInfoDTO() {
-        return BoardInfoDTO.builder()
-                .boardId(this.id)
-                .title(this.title)
-                .content(this.content)
-                .viewCount(this.viewCount)
-                .category(this.category)
-                .member(this.member.toMemberInfoDTO())
-                .build();
-    }
-
-    public BoardListDTO toBoardListDTO() {
-        return BoardListDTO.builder()
-                .boardId(this.id)
-                .title(this.title)
-                .content(this.content)
-                .viewCount(this.viewCount)
-                .category(this.category)
-                .member(this.member.toMemberInfoDTO())
-                .comments(this.comments.stream().map(Comment::toCommentInfoDTO).collect(Collectors.toList()))
-                .build();
     }
 }

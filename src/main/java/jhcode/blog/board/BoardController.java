@@ -1,8 +1,11 @@
 package jhcode.blog.board;
 
-import jhcode.blog.board.dto.BoardDTO;
-import jhcode.blog.board.dto.BoardListDTO;
-import jhcode.blog.board.dto.SearchData;
+import jhcode.blog.board.dto.request.BoardUpdateDto;
+import jhcode.blog.board.dto.request.BoardWriteDto;
+import jhcode.blog.board.dto.response.ResBoardDetailsDto;
+import jhcode.blog.board.dto.response.ResBoardListDto;
+import jhcode.blog.board.dto.request.SearchData;
+import jhcode.blog.board.dto.response.ResBoardWriteDto;
 import jhcode.blog.member.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,39 +26,40 @@ public class BoardController {
 
     // 페이징 목록
     @GetMapping("/list")
-    public ResponseEntity<Page<BoardListDTO>> boardList(
+    public ResponseEntity<Page<ResBoardListDto>> boardList(
             @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<BoardListDTO> listDTO = boardService.getAllBoards(pageable);
+        Page<ResBoardListDto> listDTO = boardService.getAllBoards(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(listDTO);
     }
 
     // 페이징 검색
     @GetMapping("/search")
-    public ResponseEntity<Page<BoardListDTO>> search(
+    public ResponseEntity<Page<ResBoardListDto>> search(
             @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestBody SearchData searchData) {
-        Page<BoardListDTO> searchBoard = boardService.search(searchData, pageable);
+        Page<ResBoardListDto> searchBoard = boardService.search(searchData, pageable);
         return  ResponseEntity.status(HttpStatus.OK).body(searchBoard);
     }
 
     @PostMapping("/write")
-    public ResponseEntity<BoardDTO> write(@RequestBody BoardDTO boardDTO,
-                                          @AuthenticationPrincipal Member member) {
-        BoardDTO saveBoardDTO = boardService.write(boardDTO, member);
+    public ResponseEntity<ResBoardWriteDto> write(@RequestBody BoardWriteDto boardDTO,
+                                               @AuthenticationPrincipal Member member) {
+        ResBoardWriteDto saveBoardDTO = boardService.write(boardDTO, member);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardDTO);
     }
 
     @GetMapping("/{boardId}")
-    public ResponseEntity<BoardDTO> detail(@PathVariable("boardId") Long boardId) {
-        BoardDTO findBoardDTO = boardService.detail(boardId);
+    public ResponseEntity<BoardWriteDto> detail(@PathVariable("boardId") Long boardId) {
+        BoardWriteDto findBoardDTO = boardService.detail(boardId);
         return ResponseEntity.status(HttpStatus.OK).body(findBoardDTO);
     }
 
     // 상세보기 -> 수정
     @PutMapping("/{boardId}/update")
-    public ResponseEntity<BoardDTO> update(@RequestBody BoardDTO boardDTO, @PathVariable Long boardId) {
-        boardDTO.setBoardId(boardId);
-        BoardDTO updateBoardDTO = boardService.update(boardDTO);
+    public ResponseEntity<ResBoardDetailsDto> update(
+            @PathVariable Long boardId,
+            @RequestBody BoardUpdateDto boardDTO) {
+        ResBoardDetailsDto updateBoardDTO = boardService.update(boardId, boardDTO);
         return ResponseEntity.status(HttpStatus.OK).body(updateBoardDTO);
     }
 

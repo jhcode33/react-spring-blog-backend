@@ -1,9 +1,12 @@
 package jhcode.blog.board;
 
 import jakarta.transaction.Transactional;
-import jhcode.blog.board.dto.BoardDTO;
-import jhcode.blog.board.dto.BoardListDTO;
-import jhcode.blog.board.dto.SearchData;
+import jhcode.blog.board.dto.request.BoardUpdateDto;
+import jhcode.blog.board.dto.request.BoardWriteDto;
+import jhcode.blog.board.dto.response.ResBoardDetailsDto;
+import jhcode.blog.board.dto.response.ResBoardListDto;
+import jhcode.blog.board.dto.request.SearchData;
+import jhcode.blog.board.dto.response.ResBoardWriteDto;
 import jhcode.blog.common.exception.ResourceNotFoundException;
 import jhcode.blog.member.Member;
 import jhcode.blog.member.MemberRepository;
@@ -25,16 +28,16 @@ public class BoardService {
     private final MemberRepository memberRepository;
 
     // 페이징 리스트
-    public Page<BoardListDTO> getAllBoards(Pageable pageable) {
+    public Page<ResBoardListDto> getAllBoards(Pageable pageable) {
         Page<Board> boards = boardRepository.findAllWithMemberAndComments(pageable);
-        List<BoardListDTO> list = boards.getContent().stream()
-                .map(Board::toBoardListDTO)
+        List<ResBoardListDto> list = boards.getContent().stream()
+                .map(ResBoardListDto::fromEntity)
                 .collect(Collectors.toList());
         return new PageImpl<>(list, pageable, boards.getTotalElements());
     }
 
     // 게시글 검색
-    public Page<BoardListDTO> search(SearchData searchData, Pageable pageable) {
+    public Page<ResBoardListDto> search(SearchData searchData, Pageable pageable) {
         Page<Board> result = null;
         if (searchData.getTitle() != null) {
             result = boardRepository.findByTitleContaining(searchData.getTitle(), pageable);
@@ -43,24 +46,24 @@ public class BoardService {
         } else if (searchData.getUsername() != null) {
             result = boardRepository.findByUsernameContaining(searchData.getUsername(), pageable);
         }
-        List<BoardListDTO> list = result.getContent().stream()
-                .map(Board::toBoardListDTO)
+        List<ResBoardListDto> list = result.getContent().stream()
+                .map(ResBoardListDto::fromEntity)
                 .collect(Collectors.toList());
         return new PageImpl<>(list, pageable, result.getTotalElements());
     }
 
     // 게시글 등록
-    public BoardDTO write(BoardDTO boardDTO, Member member) {
-        Board board = boardDTO.toEntity();
+    public ResBoardWriteDto write(BoardWriteDto boardDTO, Member member) {
+        Board board = BoardWriteDto.ofEntity(boardDTO);
         board.setMappingMember(member); //연관관계 설정
         Board saveBoard = boardRepository.save(board);
-        return saveBoard.toBoardDTO();
+        return ResBoardWriteDto.fromEntity(saveBoard);
     }
 
     // 게시글 상세보기
     // comment, file 추가되면 JPQL로 변경해야함 -> 전체 데이터를 한방에 가져올 수 있도록
-    public BoardDTO detail(Long boardId) {
-       Board findBoard = boardRepository.findByIdWithMember(boardId).orElseThrow(
+    public BoardWriteDto detail(Long boardId) {
+       Board findBoard = boardRepository.findByIdWithMemberAndCommentsAndFiles(boardId).orElseThrow(
                () -> new ResourceNotFoundException("Board", "Board Id", String.valueOf(boardId))
        );
        // 조회수 증가
@@ -69,13 +72,12 @@ public class BoardService {
     }
 
     // 게시글 수정
-    // 파일, 댓글 수정될 경우도 생각해야함
-    public BoardDTO update(BoardDTO boardDTO) {
-        Board updateBoard = boardRepository.findByIdWithMember(boardDTO.getBoardId()).orElseThrow(
-                () -> new ResourceNotFoundException("Board", "Board Id", String.valueOf(boardDTO.getBoardId()))
+    public ResBoardDetailsDto update(Long boardId, BoardUpdateDto boardDTO) {
+        Board updateBoard = boardRepository.findByIdWithMemberAndCommentsAndFiles(boardId).orElseThrow(
+                () -> new ResourceNotFoundException("Board", "Board Id", String.valueOf(boardId))
         );
         updateBoard.update(boardDTO.getTitle(), boardDTO.getContent(), boardDTO.getCategory());
-        return updateBoard.toBoardDTO();
+        return ResBoardDetailsDto.fromEntity(updateBoard);
     }
 
     // 게시글 삭제
