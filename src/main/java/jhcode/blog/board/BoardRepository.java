@@ -10,22 +10,22 @@ import java.util.Optional;
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
     // 게시글 상세 조회
-    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments JOIN FETCH b.files WHERE b.id = :boardID")
+    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member WHERE b.id = :boardID")
     Optional<Board> findByIdWithMemberAndCommentsAndFiles(Long boardID);
 
     // 첫 페이징 화면("/")
-    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments")
+    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member")
     Page<Board> findAllWithMemberAndComments(Pageable pageable);
 
     // 제목 검색
-    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments WHERE b.title LIKE %:title%")
+    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member WHERE b.title LIKE %:title%")
     Page<Board> findAllTitleContaining(String title, Pageable pageable);
 
     // 내용 검색
-    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments WHERE b.content LIKE %:content%")
+    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member WHERE b.content LIKE %:content%")
     Page<Board> findAllContentContaining(String content, Pageable pageable);
 
     // 작성자 검색
-    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member JOIN FETCH b.comments WHERE b.member.username LIKE %:username%")
+    @Query(value = "SELECT b FROM Board b JOIN FETCH b.member WHERE b.member.username LIKE %:username%")
     Page<Board> findAllUsernameContaining(String username, Pageable pageable);
 }

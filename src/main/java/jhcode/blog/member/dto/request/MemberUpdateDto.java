@@ -15,15 +15,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MemberUpdateDto {
-    // ==> 지금은 정보가 별로 없어서 다른 dto와 차별점이 없으나 차후 충분히 늘어날 수 있다고 생각
-    private String email;
+
     private String password;
     private String passwordCheck;
     private String username;
 
     @Builder
-    public MemberUpdateDto(String email, String password, String passwordCheck, String username) {
-        this.email = email;
+    public MemberUpdateDto(String password, String passwordCheck, String username) {
         this.password = password;
         this.passwordCheck = passwordCheck;
         this.username = username;

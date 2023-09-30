@@ -39,8 +39,10 @@ public class MemberController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<MemberResponseDto> update(@RequestBody MemberUpdateDto memberUpdateDTO) {
-        MemberResponseDto memberUpdate = memberService.update(memberUpdateDTO);
+    public ResponseEntity<MemberResponseDto> update(
+            @AuthenticationPrincipal Member member,
+            @RequestBody MemberUpdateDto memberUpdateDTO) {
+        MemberResponseDto memberUpdate = memberService.update(member, memberUpdateDTO);
         return ResponseEntity.status(HttpStatus.OK).body(memberUpdate);
     }
 }

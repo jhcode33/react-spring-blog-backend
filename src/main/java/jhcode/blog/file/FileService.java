@@ -4,9 +4,11 @@ import jakarta.transaction.Transactional;
 import jhcode.blog.board.Board;
 import jhcode.blog.board.BoardRepository;
 import jhcode.blog.common.exception.ResourceNotFoundException;
+import jhcode.blog.file.dto.response.ResFileDownloadDto;
 import jhcode.blog.file.dto.response.ResFileUploadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -62,20 +64,20 @@ public class FileService {
                 .filePath(filePath)
                 .fileType(multipartFile.getContentType())
                 .build();
-        saveFile.setMappingBoard(board);
 
         // File Entity 저장 및 DTO로 변환 전송
         FileEntity fileEntity =fileRepository.save(saveFile);
         return ResFileUploadDto.fromEntity(fileEntity);
     }
 
-    public byte[] download(Long fileId) throws IOException {
+    public ResFileDownloadDto download(Long fileId) throws IOException {
         FileEntity file = fileRepository.findById(fileId).orElseThrow(
                 () -> new FileNotFoundException()
         );
         String filePath = FOLDER_PATH + file.getFilePath();
-
-        return Files.readAllBytes(new File(filePath).toPath());
+        String contentType = determineContentType(file.getFileType());
+        byte[] content = Files.readAllBytes(new File(filePath).toPath());
+        return ResFileDownloadDto.fromFileResource(file, contentType, content);
     }
 
     public void delete(Long fileId) {
@@ -89,9 +91,20 @@ public class FileService {
         if (physicalFile.exists()) {
             physicalFile.delete();
         }
-
-        // 연관관계 & DB 삭제
-        file.delete();
         fileRepository.delete(file);
+    }
+
+    private String determineContentType(String contentType) {
+        // ContentType에 따라 MediaType 결정
+        switch (contentType) {
+            case "image/png":
+                return MediaType.IMAGE_PNG_VALUE;
+            case "image/jpeg":
+                return MediaType.IMAGE_JPEG_VALUE;
+            case "text/plain":
+                return MediaType.TEXT_PLAIN_VALUE;
+            default:
+                return MediaType.APPLICATION_OCTET_STREAM_VALUE;
+        }
     }
 }

@@ -52,6 +52,7 @@ public class ResBoardDetailsDto {
 
     public static ResBoardDetailsDto fromEntity(Board board) {
         return ResBoardDetailsDto.builder()
+                .boardId(board.getId())
                 .title(board.getTitle())
                 .content(board.getContent())
                 .category(board.getCategory())

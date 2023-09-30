@@ -43,8 +43,8 @@ public class BoardService {
             result = boardRepository.findAllTitleContaining(searchData.getTitle(), pageable);
         } else if (searchData.getContent() != null) {
             result = boardRepository.findAllContentContaining(searchData.getContent(), pageable);
-        } else if (searchData.getUsername() != null) {
-            result = boardRepository.findAllUsernameContaining(searchData.getUsername(), pageable);
+        } else if (searchData.getWriterName() != null) {
+            result = boardRepository.findAllUsernameContaining(searchData.getWriterName(), pageable);
         }
         List<ResBoardListDto> list = result.getContent().stream()
                 .map(ResBoardListDto::fromEntity)

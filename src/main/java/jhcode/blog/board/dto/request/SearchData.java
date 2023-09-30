@@ -14,5 +14,5 @@ public class SearchData {
 
     String title;
     String content;
-    String username;
+    String writerName;
 }

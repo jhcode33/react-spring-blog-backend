@@ -45,10 +45,6 @@ public class CommentService {
     }
 
     public void delete(Long commentId) {
-        Comment comment = commentRepository.findByIdWithMemberAndBoard(commentId).orElseThrow(
-                () -> new ResourceNotFoundException("Comment", "Comment Id", String.valueOf(commentId))
-        );
-        comment.delete(); // 연관관계 삭제
         commentRepository.deleteById(commentId);
     }
 }

@@ -8,6 +8,7 @@ import jhcode.blog.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +36,12 @@ public class Board extends BaseTimeEntity {
     @JoinColumn(name = "MEMBER_ID")
     public Member member;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
     public List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @BatchSize(size = 10)
     public List<FileEntity> files = new ArrayList<>();
 
     @Builder
@@ -66,5 +69,6 @@ public class Board extends BaseTimeEntity {
     //== Member & Board 연관관계 편의 메소드 ==//
     public void setMappingMember(Member member) {
         this.member = member;
+        member.getBoards().add(this);
     }
 }

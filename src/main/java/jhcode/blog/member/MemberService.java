@@ -54,15 +54,15 @@ public class MemberService {
 
     public MemberResponseDto check(Member member, String password) {
         Member checkMember = (Member) userDetailsService.loadUserByUsername(member.getEmail());
-        checkEncodePassword(checkMember.getPassword(), member.getPassword());
+        checkEncodePassword(password, checkMember.getPassword());
         return MemberResponseDto.fromEntity(checkMember);
     }
 
-    public MemberResponseDto update(MemberUpdateDto updateDto) {
+    public MemberResponseDto update(Member member, MemberUpdateDto updateDto) {
         checkPassword(updateDto.getPassword(), updateDto.getPasswordCheck());
         String encodePwd = encoder.encode(updateDto.getPassword());
 
-        Member updateMember = findByEmail(updateDto.getEmail());
+        Member updateMember = findByEmail(member.getEmail());
         updateMember.update(encodePwd, updateDto.getUsername());
         return MemberResponseDto.fromEntity(updateMember);
     }

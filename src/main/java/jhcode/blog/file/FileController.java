@@ -1,5 +1,6 @@
 package jhcode.blog.file;
 
+import jhcode.blog.file.dto.response.ResFileDownloadDto;
 import jhcode.blog.file.dto.response.ResFileUploadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -24,7 +25,6 @@ public class FileController {
     public ResponseEntity<ResFileUploadDto> upload (
             @PathVariable Long boardId,
             @RequestParam("file") MultipartFile file) throws IOException {
-        // IOException을 Runtime으로 처리해야하지 않을까?
         ResFileUploadDto saveFile = fileService.upload(boardId, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveFile);
 
@@ -33,12 +33,12 @@ public class FileController {
     @GetMapping("/download")
     public ResponseEntity<Resource> download (
             @RequestParam("fileId") Long fileId) throws IOException {
-        byte[] downloadFile = fileService.download(fileId);
+        ResFileDownloadDto downloadDto = fileService.download(fileId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileId=\"" + fileId + "\"")
-                .body(new ByteArrayResource(downloadFile));
+                .contentType(MediaType.parseMediaType(downloadDto.getFileType()))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; fileName=\"" + downloadDto.getFilename() + "\"")
+                .body(new ByteArrayResource(downloadDto.getContent()));
     }
 
     @DeleteMapping("/delete")

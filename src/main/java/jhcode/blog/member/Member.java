@@ -1,6 +1,7 @@
 package jhcode.blog.member;
 
 import jakarta.persistence.*;
+import jhcode.blog.board.Board;
 import jhcode.blog.comment.Comment;
 import jhcode.blog.common.BaseTimeEntity;
 import jhcode.blog.common.Role;
@@ -37,9 +38,11 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role roles;
 
-    @OneToMany(mappedBy = "member")
-    public List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<Board> boards = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public List<Comment> comments = new ArrayList<>();
 
     //== 생성자 Builder ==//
     @Builder

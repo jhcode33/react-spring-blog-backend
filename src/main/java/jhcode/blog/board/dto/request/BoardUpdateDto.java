@@ -18,8 +18,6 @@ public class BoardUpdateDto {
     private String title;
     private String content;
     private String category;
-    private String writerName;
-    private String createdDate;
 
     @Builder
     public BoardUpdateDto(String title, String content, String category) {

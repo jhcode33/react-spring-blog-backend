@@ -36,13 +36,4 @@ public class FileEntity extends BaseTimeEntity {
         this.filePath = filePath;
         this.fileType = fileType;
     }
-
-    public void setMappingBoard(Board board) {
-        this.board = board;
-        board.getFiles().add(this);
-    }
-
-    public void delete() {
-        this.board.getFiles().remove(this);
-    }
 }
