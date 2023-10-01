@@ -3,7 +3,6 @@ package jhcode.blog.board.dto.response;
 import jhcode.blog.board.Board;
 import jhcode.blog.comment.dto.response.ResCommentDto;
 import jhcode.blog.file.dto.response.ResBoardDetailsFileDto;
-import jhcode.blog.file.dto.response.ResFileUploadDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,8 +56,8 @@ public class ResBoardDetailsDto {
                 .content(board.getContent())
                 .category(board.getCategory())
                 .writerName(board.getMember().getUsername())
-                .createdDate(board.getCreateDate().toString())
-                .modifiedDate(board.getModifiedDate().toString())
+                .createdDate(board.getCreatedDate())
+                .modifiedDate(board.getModifiedDate())
                 .comments(board.getComments().stream()
                         .map(ResCommentDto::fromEntity)
                         .collect(Collectors.toList()))

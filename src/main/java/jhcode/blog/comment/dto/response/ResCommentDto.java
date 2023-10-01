@@ -35,8 +35,8 @@ public class ResCommentDto {
         return ResCommentDto.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
-                .createdDate(comment.getCreateDate().toString())
-                .modifiedDate(comment.getModifiedDate().toString())
+                .createdDate(comment.getCreatedDate())
+                .modifiedDate(comment.getModifiedDate())
                 .commentWriterName(comment.getMember().getUsername())
                 .build();
     }

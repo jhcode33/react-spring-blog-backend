@@ -48,8 +48,8 @@ public class ResBoardListDto {
                 .content(board.getContent())
                 .viewCount(board.getViewCount())
                 .category(board.getCategory())
-                .createdDate(board.getCreateDate().toString())
-                .modifiedDate(board.getModifiedDate().toString())
+                .createdDate(board.getCreatedDate())
+                .modifiedDate(board.getModifiedDate())
                 .writerName(board.getMember().getUsername())
                 .commentCount(board.getComments().size())
                 .build();
