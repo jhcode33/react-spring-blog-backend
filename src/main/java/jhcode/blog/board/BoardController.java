@@ -34,11 +34,14 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.OK).body(listDTO);
     }
 
-    // 페이징 검색
+    // 페이징 검색 , Get 요청 @RequestBody 사용할 수 없음
     @GetMapping("/search")
     public ResponseEntity<Page<ResBoardListDto>> search(
             @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestBody SearchData searchData) {
+            @RequestParam String title,
+            @RequestParam String content,
+            @RequestParam String writerName) {
+        SearchData searchData = SearchData.createdSearchData(title, content, writerName);
         Page<ResBoardListDto> searchBoard = boardService.search(searchData, pageable);
         return  ResponseEntity.status(HttpStatus.OK).body(searchBoard);
     }
@@ -59,7 +62,7 @@ public class BoardController {
     }
 
     // 상세보기 -> 수정
-    @PutMapping("/{boardId}/update")
+    @PatchMapping("/{boardId}/update")
     public ResponseEntity<ResBoardDetailsDto> update(
             @PathVariable Long boardId,
             @RequestBody BoardUpdateDto boardDTO) {

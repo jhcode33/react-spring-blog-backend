@@ -36,14 +36,14 @@ public class BoardService {
         return new PageImpl<>(list, pageable, boards.getTotalElements());
     }
 
-    // 게시글 검색
+    // 게시글 검색, isEmpty() == ""
     public Page<ResBoardListDto> search(SearchData searchData, Pageable pageable) {
         Page<Board> result = null;
-        if (searchData.getTitle() != null) {
+        if (!searchData.getTitle().isEmpty()) {
             result = boardRepository.findAllTitleContaining(searchData.getTitle(), pageable);
-        } else if (searchData.getContent() != null) {
+        } else if (!searchData.getContent().isEmpty()) {
             result = boardRepository.findAllContentContaining(searchData.getContent(), pageable);
-        } else if (searchData.getWriterName() != null) {
+        } else if (!searchData.getWriterName().isEmpty()) {
             result = boardRepository.findAllUsernameContaining(searchData.getWriterName(), pageable);
         }
         List<ResBoardListDto> list = result.getContent().stream()
