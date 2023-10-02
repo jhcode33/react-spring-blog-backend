@@ -18,6 +18,12 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    @GetMapping("/checkId")
+    public ResponseEntity<?> checkIdDuplicate(@RequestParam String email) {
+        memberService.checkIdDuplicate(email);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
     @PostMapping("/register")
     public ResponseEntity<MemberResponseDto> register(@RequestBody MemberRegisterDto memberRegisterDTO) {
         MemberResponseDto successMember = memberService.register(memberRegisterDTO);
@@ -30,7 +36,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).header(loginDTO.getToken()).body(loginDTO);
     }
 
-    @PostMapping("/check")
+    @PostMapping("/checkPwd")
     public ResponseEntity<MemberResponseDto> check(
             @AuthenticationPrincipal Member member,
             @RequestParam("password") String password) {

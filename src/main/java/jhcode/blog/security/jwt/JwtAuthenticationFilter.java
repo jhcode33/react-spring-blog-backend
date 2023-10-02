@@ -38,12 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
-//        // 특정 엔드포인트에 대해서는 토큰 검사를 생략
-//        if (isEndpointPermitted(request.getRequestURI())) {
-//            filterChain.doFilter(request, response);
-//            return;
-//        }
+        Thread currentThread = Thread.currentThread();
+        log.info("현재 실행 중인 스레드: " + currentThread.getName());
 
         // get token
         String header = request.getHeader(HEADER_STRING);
@@ -68,12 +64,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 log.info("Unable to get JWT Token !!");
                 e.getStackTrace();
             }
+
         } else {
             log.info("JWT does not begin with Bearer !!");
         }
 
         if ((username != null) && (SecurityContextHolder.getContext().getAuthentication() == null)) {
-
+            //log.info(SecurityContextHolder.getContext().getAuthentication().getName());
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
             if (this.jwtTokenUtil.validateToken(authToken, userDetails)) {
 
@@ -95,8 +92,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
-//    private boolean isEndpointPermitted(String uri) {
-//        return "/user/login".equals(uri) || "/user/register".equals(uri);
-//    }
 }

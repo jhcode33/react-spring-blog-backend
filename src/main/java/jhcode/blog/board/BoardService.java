@@ -54,8 +54,12 @@ public class BoardService {
 
     // 게시글 등록
     public ResBoardWriteDto write(BoardWriteDto boardDTO, Member member) {
+
         Board board = BoardWriteDto.ofEntity(boardDTO);
-        board.setMappingMember(member); //연관관계 설정
+        Member writerMember = memberRepository.findByEmail(member.getEmail()).orElseThrow(
+                () -> new ResourceNotFoundException("Member", "Member Email", member.getEmail())
+        );
+        board.setMappingMember(writerMember);
         Board saveBoard = boardRepository.save(board);
         return ResBoardWriteDto.fromEntity(saveBoard);
     }

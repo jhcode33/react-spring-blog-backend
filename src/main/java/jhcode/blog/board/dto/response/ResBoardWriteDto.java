@@ -39,7 +39,7 @@ public class ResBoardWriteDto {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .category(board.getCategory())
-                .writerName(board.getMember().getUsername())
+                //.writerName(board.getMember().getUsername())
                 .createdDate(board.getCreatedDate())
                 .build();
     }

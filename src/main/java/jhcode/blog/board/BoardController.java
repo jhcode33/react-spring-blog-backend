@@ -8,6 +8,7 @@ import jhcode.blog.board.dto.request.SearchData;
 import jhcode.blog.board.dto.response.ResBoardWriteDto;
 import jhcode.blog.member.Member;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/board")
 @RequiredArgsConstructor
+@Slf4j
 public class BoardController {
 
     private final BoardService boardService;
@@ -44,6 +46,8 @@ public class BoardController {
     @PostMapping("/write")
     public ResponseEntity<ResBoardWriteDto> write(@RequestBody BoardWriteDto boardDTO,
                                                @AuthenticationPrincipal Member member) {
+        Thread currentThread = Thread.currentThread();
+        log.info("현재 실행 중인 스레드: " + currentThread.getName());
         ResBoardWriteDto saveBoardDTO = boardService.write(boardDTO, member);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveBoardDTO);
     }

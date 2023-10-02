@@ -26,6 +26,7 @@ public class ResBoardDetailsDto {
     private String title;
     private String content;
     private String category;
+    private int viewCount;
     private String writerName;
     private String createdDate;
     private String modifiedDate;
@@ -37,11 +38,12 @@ public class ResBoardDetailsDto {
     private List<ResBoardDetailsFileDto> files;
 
     @Builder
-    public ResBoardDetailsDto(Long boardId, String title, String content, String category, String writerName, String createdDate, String modifiedDate, List<ResCommentDto> comments, List<ResBoardDetailsFileDto> files) {
+    public ResBoardDetailsDto(Long boardId, String title, String content, String category, int viewCount, String writerName, String createdDate, String modifiedDate, List<ResCommentDto> comments, List<ResBoardDetailsFileDto> files) {
         this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.category = category;
+        this.viewCount = viewCount;
         this.writerName = writerName;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
@@ -55,6 +57,7 @@ public class ResBoardDetailsDto {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .category(board.getCategory())
+                .viewCount(board.getViewCount())
                 .writerName(board.getMember().getUsername())
                 .createdDate(board.getCreatedDate())
                 .modifiedDate(board.getModifiedDate())

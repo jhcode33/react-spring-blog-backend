@@ -13,6 +13,11 @@ import jhcode.blog.security.jwt.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +29,15 @@ public class MemberService {
 
     private final PasswordEncoder encoder;
     private final MemberRepository memberRepository;
+
+    private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
+
+    public HttpStatus checkIdDuplicate(String email) {
+        isExistUserEmail(email);
+        return HttpStatus.OK;
+    }
 
     public MemberResponseDto register(MemberRegisterDto registerDto) {
         // 이메일 확인
@@ -45,11 +57,12 @@ public class MemberService {
     }
 
 
-    public MemberTokenDto login(MemberLoginDto loginDTO) {
-        Member member = (Member) userDetailsService.loadUserByUsername(loginDTO.getEmail());
-        checkEncodePassword(loginDTO.getPassword(), member.getPassword());
-        String token = jwtTokenUtil.generateToken(member);
-        return MemberTokenDto.fromEntity(member, token);
+    public MemberTokenDto login(MemberLoginDto loginDto) {
+        authenticate(loginDto.getEmail(), loginDto.getPassword());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginDto.getEmail());
+        checkEncodePassword(loginDto.getPassword(), userDetails.getPassword());
+        String token = jwtTokenUtil.generateToken(userDetails);
+        return MemberTokenDto.fromEntity(userDetails, token);
     }
 
     public MemberResponseDto check(Member member, String password) {
@@ -65,6 +78,18 @@ public class MemberService {
         Member updateMember = findByEmail(member.getEmail());
         updateMember.update(encodePwd, updateDto.getUsername());
         return MemberResponseDto.fromEntity(updateMember);
+    }
+
+    private void authenticate(String email, String pwd) {
+
+
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, pwd));
+        } catch (DisabledException e) {
+            throw new MemberException("인증되지 않은 아이디입니다.", HttpStatus.BAD_REQUEST);
+        } catch (BadCredentialsException e) {
+            throw new MemberException("비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
     }
 
     private void isExistUserEmail(String email) {

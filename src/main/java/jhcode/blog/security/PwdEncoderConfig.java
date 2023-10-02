@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  * - 순환참조 방지
  */
 @Configuration
-public class PasswordEncoderConfig {
+public class PwdEncoderConfig {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
