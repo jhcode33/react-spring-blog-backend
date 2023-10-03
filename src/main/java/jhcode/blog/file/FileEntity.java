@@ -26,7 +26,7 @@ public class FileEntity extends BaseTimeEntity {
     @Column(name = "FILE_PATH")
     private String filePath;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public Board board;
 
     @Builder
@@ -35,5 +35,9 @@ public class FileEntity extends BaseTimeEntity {
         this.originFileName = originFileName;
         this.filePath = filePath;
         this.fileType = fileType;
+    }
+
+    public void setMappingBoard(Board board) {
+        this.board = board;
     }
 }

@@ -6,6 +6,8 @@ import jhcode.blog.board.dto.response.ResBoardDetailsDto;
 import jhcode.blog.board.dto.response.ResBoardListDto;
 import jhcode.blog.board.dto.request.SearchData;
 import jhcode.blog.board.dto.response.ResBoardWriteDto;
+import jhcode.blog.file.FileService;
+import jhcode.blog.file.dto.response.ResFileUploadDto;
 import jhcode.blog.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/board")
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class BoardController {
 
     private final BoardService boardService;
+    private final FileService fileService;
 
     // 페이징 목록
     @GetMapping("/list")
@@ -47,8 +53,9 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public ResponseEntity<ResBoardWriteDto> write(@RequestBody BoardWriteDto boardDTO,
-                                               @AuthenticationPrincipal Member member) {
+    public ResponseEntity<ResBoardWriteDto> write(
+            @RequestBody BoardWriteDto boardDTO,
+            @AuthenticationPrincipal Member member) {
         Thread currentThread = Thread.currentThread();
         log.info("현재 실행 중인 스레드: " + currentThread.getName());
         ResBoardWriteDto saveBoardDTO = boardService.write(boardDTO, member);
