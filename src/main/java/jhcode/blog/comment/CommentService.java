@@ -8,7 +8,13 @@ import jhcode.blog.common.exception.ResourceNotFoundException;
 import jhcode.blog.member.Member;
 import jhcode.blog.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +23,14 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
+
+    public Page<ResCommentDto> getAllComments(Pageable pageable) {
+        Page<Comment> comments = commentRepository.findAllWithMemberAndBoard(pageable);
+        List<ResCommentDto> commentList = comments.getContent().stream()
+                .map(ResCommentDto::fromEntity)
+                .collect(Collectors.toList());
+        return new PageImpl<>(commentList, pageable, comments.getTotalElements());
+    }
 
     public ResCommentDto write(Long boardId, Member member, CommentDto writeDto) {
         // board 정보 검색
