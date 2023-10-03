@@ -1,5 +1,6 @@
 package jhcode.blog.comment;
 
+import jakarta.transaction.Transactional;
 import jhcode.blog.board.Board;
 import jhcode.blog.board.BoardRepository;
 import jhcode.blog.comment.dto.request.CommentDto;
@@ -18,14 +19,15 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
     private final MemberRepository memberRepository;
 
-    public Page<ResCommentDto> getAllComments(Pageable pageable) {
-        Page<Comment> comments = commentRepository.findAllWithMemberAndBoard(pageable);
+    public Page<ResCommentDto> getAllComments(Pageable pageable, Long boardId) {
+        Page<Comment> comments = commentRepository.findAllWithMemberAndBoard(pageable, boardId);
         List<ResCommentDto> commentList = comments.getContent().stream()
                 .map(ResCommentDto::fromEntity)
                 .collect(Collectors.toList());
