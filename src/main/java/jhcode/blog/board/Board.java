@@ -30,8 +30,6 @@ public class Board extends BaseTimeEntity {
     @Column(name = "VIEW_COUNT")
     private int viewCount;
 
-    private String category;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     public Member member;
@@ -45,12 +43,11 @@ public class Board extends BaseTimeEntity {
     public List<FileEntity> files = new ArrayList<>();
 
     @Builder
-    public Board(Long id, String title, String content, int viewCount, String category, Member member) {
+    public Board(Long id, String title, String content, int viewCount, Member member) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
-        this.category = category;
         this.member = member;
     }
 
@@ -60,10 +57,9 @@ public class Board extends BaseTimeEntity {
     }
 
     //== 수정 Dirty Checking ==//
-    public void update(String title, String content, String category) {
+    public void update(String title, String content) {
         this.title = title;
         this.content = content;
-        this.category = category;
     }
 
     //== Member & Board 연관관계 편의 메소드 ==//

@@ -2,12 +2,10 @@ package jhcode.blog.board;
 
 import jhcode.blog.board.dto.request.BoardUpdateDto;
 import jhcode.blog.board.dto.request.BoardWriteDto;
+import jhcode.blog.board.dto.request.SearchData;
 import jhcode.blog.board.dto.response.ResBoardDetailsDto;
 import jhcode.blog.board.dto.response.ResBoardListDto;
-import jhcode.blog.board.dto.request.SearchData;
 import jhcode.blog.board.dto.response.ResBoardWriteDto;
-import jhcode.blog.file.FileService;
-import jhcode.blog.file.dto.response.ResFileUploadDto;
 import jhcode.blog.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/board")
@@ -30,7 +25,6 @@ import java.io.IOException;
 public class BoardController {
 
     private final BoardService boardService;
-    private final FileService fileService;
 
     // 페이징 목록
     @GetMapping("/list")
