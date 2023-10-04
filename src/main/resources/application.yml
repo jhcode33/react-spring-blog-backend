@@ -24,7 +24,7 @@ jwt:
   header: "Authorization"
   prefix: "Bearer "
   secret: eyJhbGciOiJIUzUxMiJ9eyJzdWIiOiJ1c2VyIn0I2qOfhAZMGSH1pCecUH5sV2Lg2pSWNQMPzXsMcne6NJ1SlkBoirhGAmKfTYNcRyhu6nQtRzgAd6VXyttoX9A
-  tokenExpirationTime: 18000          #?? ?? ?? (?: 300?)
+  tokenExpirationTime: 18000
 
 project:
   folderPath: "files/"

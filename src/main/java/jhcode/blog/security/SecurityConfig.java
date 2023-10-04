@@ -46,6 +46,7 @@ public class SecurityConfig {
                                          "/user/login",
                                          "/board/{boardId}/comment/list/**",
                                          "/board/{boardId}/file/download/**").permitAll()
+
                         .requestMatchers("/user/**").hasRole("USER")
                         .requestMatchers("/board/**").hasRole("USER")
                         .requestMatchers("/board/{boardId}/comment/**").hasRole("USER")
