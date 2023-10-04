@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    // 게시글 상세 조회, @BatchSize : Comments와 Files는 in 절로 가져옴
+    // 게시글 상세 조회, @BatchSize : Comments와 Files는 필요할 때 in 절로 가져옴
     @Query(value = "SELECT b FROM Board b JOIN FETCH b.member WHERE b.id = :boardID")
     Optional<Board> findByIdWithMemberAndCommentsAndFiles(Long boardID);
 

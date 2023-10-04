@@ -29,7 +29,7 @@ public class BoardController {
     // 페이징 목록
     @GetMapping("/list")
     public ResponseEntity<Page<ResBoardListDto>> boardList(
-            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<ResBoardListDto> listDTO = boardService.getAllBoards(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(listDTO);
     }

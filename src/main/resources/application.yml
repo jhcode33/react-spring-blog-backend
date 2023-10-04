@@ -20,6 +20,12 @@ spring:
     open-in-view: true
     show-sql: true
 
+  #default 1MB
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 jwt:
   header: "Authorization"
   prefix: "Bearer "
