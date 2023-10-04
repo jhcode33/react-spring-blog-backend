@@ -40,10 +40,7 @@ public class MemberService {
     }
 
     public MemberResponseDto register(MemberRegisterDto registerDto) {
-        // 이메일 확인
         isExistUserEmail(registerDto.getEmail());
-
-        // 패스워드 일치 확인
         checkPassword(registerDto.getPassword(), registerDto.getPasswordCheck());
 
         // 패스워드 암호화
@@ -74,15 +71,19 @@ public class MemberService {
     public MemberResponseDto update(Member member, MemberUpdateDto updateDto) {
         checkPassword(updateDto.getPassword(), updateDto.getPasswordCheck());
         String encodePwd = encoder.encode(updateDto.getPassword());
-
-        Member updateMember = findByEmail(member.getEmail());
+        Member updateMember =  memberRepository.findByEmail(member.getEmail()).orElseThrow(
+                () -> new ResourceNotFoundException("Member", "Member Email", member.getEmail())
+        );
         updateMember.update(encodePwd, updateDto.getUsername());
         return MemberResponseDto.fromEntity(updateMember);
     }
 
+    /**
+     * 사용자 인증
+     * @param email
+     * @param pwd
+     */
     private void authenticate(String email, String pwd) {
-
-
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, pwd));
         } catch (DisabledException e) {
@@ -92,27 +93,35 @@ public class MemberService {
         }
     }
 
+    /**
+     * 아이디(이메일) 중복 체크
+     * @param email
+     */
     private void isExistUserEmail(String email) {
         if (memberRepository.findByEmail(email).isPresent()) {
             throw new MemberException("이미 사용 중인 이메일입니다.", HttpStatus.BAD_REQUEST);
         }
     }
 
+    /**
+     * 비밀번호와 비밀번호 확인이 같은지 체크
+     * @param password
+     * @param passwordCheck
+     */
     private void checkPassword(String password, String passwordCheck) {
         if (!password.equals(passwordCheck)) {
             throw new MemberException("패스워드 불일치", HttpStatus.BAD_REQUEST);
         }
     }
 
+    /**
+     * 사용자가 입력한 비번과 DB에 저장된 비번이 같은지 체크 : 인코딩 확인
+     * @param rawPassword
+     * @param encodedPassword
+     */
     private void checkEncodePassword(String rawPassword, String encodedPassword) {
         if (!encoder.matches(rawPassword, encodedPassword)) {
             throw new MemberException("패스워드 불일치", HttpStatus.BAD_REQUEST);
         }
-    }
-
-    private Member findByEmail(String email) {
-        return memberRepository.findByEmail(email).orElseThrow(
-                () -> new ResourceNotFoundException("Member", "Member Email", email)
-        );
     }
 }

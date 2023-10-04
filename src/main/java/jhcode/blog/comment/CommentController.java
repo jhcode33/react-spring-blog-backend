@@ -4,6 +4,10 @@ import jhcode.blog.comment.dto.request.CommentDto;
 import jhcode.blog.comment.dto.response.ResCommentDto;
 import jhcode.blog.member.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +20,15 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    @GetMapping("/list")
+    public ResponseEntity<Page<ResCommentDto>> commentList(
+            @PathVariable Long boardId,
+            @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        Page<ResCommentDto> commentList = commentService.getAllComments(pageable, boardId);
+        return ResponseEntity.status(HttpStatus.OK).body(commentList);
+    }
+
     @PostMapping("/write")
     public ResponseEntity<ResCommentDto> write(
             @AuthenticationPrincipal Member member,
@@ -26,7 +39,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saveCommentDTO);
     }
 
-    @PutMapping("/update/{commentId}")
+    @PatchMapping("/update/{commentId}")
     public ResponseEntity<ResCommentDto> update(
             @PathVariable Long commentId,
             @RequestBody CommentDto commentDto) {

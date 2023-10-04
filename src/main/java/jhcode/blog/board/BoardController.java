@@ -2,9 +2,9 @@ package jhcode.blog.board;
 
 import jhcode.blog.board.dto.request.BoardUpdateDto;
 import jhcode.blog.board.dto.request.BoardWriteDto;
+import jhcode.blog.board.dto.request.SearchData;
 import jhcode.blog.board.dto.response.ResBoardDetailsDto;
 import jhcode.blog.board.dto.response.ResBoardListDto;
-import jhcode.blog.board.dto.request.SearchData;
 import jhcode.blog.board.dto.response.ResBoardWriteDto;
 import jhcode.blog.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -47,8 +47,9 @@ public class BoardController {
     }
 
     @PostMapping("/write")
-    public ResponseEntity<ResBoardWriteDto> write(@RequestBody BoardWriteDto boardDTO,
-                                               @AuthenticationPrincipal Member member) {
+    public ResponseEntity<ResBoardWriteDto> write(
+            @RequestBody BoardWriteDto boardDTO,
+            @AuthenticationPrincipal Member member) {
         Thread currentThread = Thread.currentThread();
         log.info("현재 실행 중인 스레드: " + currentThread.getName());
         ResBoardWriteDto saveBoardDTO = boardService.write(boardDTO, member);

@@ -21,23 +21,19 @@ public class ResBoardListDto {
     private String title;
     private String content;
     private int viewCount;
-    private String category;
     private String createdDate;
     private String modifiedDate;
     private String writerName;
-    private int commentCount;
 
     @Builder
-    public ResBoardListDto(Long boardId, String title, String content, int viewCount, String category, String createdDate, String modifiedDate, String writerName, int commentCount) {
+    public ResBoardListDto(Long boardId, String title, String content, int viewCount, String createdDate, String modifiedDate, String writerName) {
         this.boardId = boardId;
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
-        this.category = category;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
         this.writerName = writerName;
-        this.commentCount = commentCount;
     }
 
     // Entity -> DTO
@@ -47,11 +43,9 @@ public class ResBoardListDto {
                 .title(board.getTitle())
                 .content(board.getContent())
                 .viewCount(board.getViewCount())
-                .category(board.getCategory())
                 .createdDate(board.getCreatedDate())
                 .modifiedDate(board.getModifiedDate())
                 .writerName(board.getMember().getUsername())
-                .commentCount(board.getComments().size())
                 .build();
     }
 }
