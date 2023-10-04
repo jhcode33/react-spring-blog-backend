@@ -65,6 +65,7 @@ public class FileService {
                 .fileType(multipartFile.getContentType())
                 .build();
         saveFile.setMappingBoard(board);
+
         // File Entity 저장 및 DTO로 변환 전송
         FileEntity fileEntity =fileRepository.save(saveFile);
         return ResFileUploadDto.fromEntity(fileEntity);
