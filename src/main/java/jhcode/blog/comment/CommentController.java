@@ -1,6 +1,5 @@
 package jhcode.blog.comment;
 
-import jakarta.transaction.Transactional;
 import jhcode.blog.comment.dto.request.CommentDto;
 import jhcode.blog.comment.dto.response.ResCommentDto;
 import jhcode.blog.member.Member;
@@ -25,10 +24,10 @@ public class CommentController {
     public ResponseEntity<Page<ResCommentDto>> commentList(
             @PathVariable Long boardId,
             @PageableDefault(size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+
         Page<ResCommentDto> commentList = commentService.getAllComments(pageable, boardId);
         return ResponseEntity.status(HttpStatus.OK).body(commentList);
     }
-
 
     @PostMapping("/write")
     public ResponseEntity<ResCommentDto> write(
