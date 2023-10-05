@@ -82,6 +82,7 @@ React와 Spring boot를 활용한 SPA 게시판 프로젝트입니다. 아래와
 <img width="575" alt="CommentAPI" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/b6b80f61-1c1f-44df-bcd5-e3ba2e678a0f">
 <img width="575" alt="MemberTable" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/c6ee6ea3-6bfd-45af-bccf-eb9e41053089">
 
+<br>
 
 ## 3. 기술 스택
 ### 📌Backend

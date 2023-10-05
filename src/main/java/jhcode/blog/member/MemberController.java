@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -39,7 +41,8 @@ public class MemberController {
     @PostMapping("/checkPwd")
     public ResponseEntity<MemberResponseDto> check(
             @AuthenticationPrincipal Member member,
-            @RequestParam("password") String password) {
+            @RequestBody Map<String, String> request) {
+        String password = request.get("password");
         MemberResponseDto memberInfo = memberService.check(member, password);
         return ResponseEntity.status(HttpStatus.OK).body(memberInfo);
     }
