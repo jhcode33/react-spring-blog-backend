@@ -17,7 +17,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,45 +33,51 @@ public class FileService {
     @Value("${project.folderPath}")
     private String FOLDER_PATH;
 
-    public ResFileUploadDto upload(Long boardId, MultipartFile multipartFile) throws IOException {
+    public List<ResFileUploadDto> upload(Long boardId, List<MultipartFile> multipartFiles) throws IOException {
         // 게시글 찾기
         Board board = boardRepository.findById(boardId).orElseThrow(
                 () -> new ResourceNotFoundException("Board", "Board Id", String.valueOf(boardId))
         );
+        List<FileEntity> fileEntitys = new ArrayList<>();
+        for (MultipartFile multipartFile : multipartFiles) {
+            // get origin file name
+            String fileName = multipartFile.getOriginalFilename();
 
-        // get origin file name
-        String fileName = multipartFile.getOriginalFilename();
+            // random name generation of image while uploading to store in folder
+            String randomId = UUID.randomUUID().toString();
 
-        // random name generation of image while uploading to store in folder
-        String randomId = UUID.randomUUID().toString();
+            // create save File name : ex) POST_boardID_randomID.확장자
+            String filePath =
+                    "POST_" + board.getId() + "_" + randomId.concat(fileName.substring(fileName.indexOf(".")));
 
-        // create save File name : ex) POST_boardID_randomID.확장자
-        String filePath =
-                "POST_" + board.getId() + "_" + randomId.concat(fileName.substring(fileName.indexOf(".")));
+            // File.separator : OS에 따른 구분자
+            String fileResourcePath = FOLDER_PATH + File.separator + filePath;
 
-        // File.separator : OS에 따른 구분자
-        String fileResourcePath = FOLDER_PATH + File.separator + filePath;
+            // create folder if not created
+            File f = new File(FOLDER_PATH);
+            if (!f.exists()) {
+                f.mkdir();
+            }
 
-        // create folder if not created
-        File f = new File(FOLDER_PATH);
-        if (!f.exists()) {
-            f.mkdir();
+            // file copy in folder
+            Files.copy(multipartFile.getInputStream(), Paths.get(fileResourcePath));
+
+            // create File Entity & 연관관게 매핑
+            FileEntity saveFile = FileEntity.builder()
+                    .originFileName(multipartFile.getOriginalFilename())
+                    .filePath(filePath)
+                    .fileType(multipartFile.getContentType())
+                    .build();
+            saveFile.setMappingBoard(board);
+            // File Entity 저장 및 DTO로 변환 전송
+
+            fileEntitys.add(fileRepository.save(saveFile));
         }
+        List<ResFileUploadDto> dtos = fileEntitys.stream()
+                .map(ResFileUploadDto::fromEntity)
+                .collect(Collectors.toList());
 
-        // file copy in folder
-        Files.copy(multipartFile.getInputStream(), Paths.get(fileResourcePath));
-
-        // create File Entity & 연관관게 매핑
-        FileEntity saveFile = FileEntity.builder()
-                .originFileName(multipartFile.getOriginalFilename())
-                .filePath(filePath)
-                .fileType(multipartFile.getContentType())
-                .build();
-        saveFile.setMappingBoard(board);
-
-        // File Entity 저장 및 DTO로 변환 전송
-        FileEntity fileEntity =fileRepository.save(saveFile);
-        return ResFileUploadDto.fromEntity(fileEntity);
+        return dtos;
     }
 
     public ResFileDownloadDto download(Long fileId) throws IOException {

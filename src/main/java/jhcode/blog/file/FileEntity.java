@@ -26,7 +26,7 @@ public class FileEntity extends BaseTimeEntity {
     @Column(name = "FILE_PATH")
     private String filePath;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "BOARD_ID")
     public Board board;
 

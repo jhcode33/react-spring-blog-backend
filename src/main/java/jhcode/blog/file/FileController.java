@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/board/{boardId}/file")
@@ -22,12 +23,11 @@ public class FileController {
     private final FileService fileService;
 
     @PostMapping("/upload")
-    public ResponseEntity<ResFileUploadDto> upload (
+    public ResponseEntity<List<ResFileUploadDto>> upload (
             @PathVariable Long boardId,
-            @RequestParam("file") MultipartFile file) throws IOException {
-        ResFileUploadDto saveFile = fileService.upload(boardId, file);
+            @RequestParam("file") List<MultipartFile> files) throws IOException {
+        List<ResFileUploadDto> saveFile = fileService.upload(boardId, files);
         return ResponseEntity.status(HttpStatus.CREATED).body(saveFile);
-
     }
 
     @GetMapping("/download")
