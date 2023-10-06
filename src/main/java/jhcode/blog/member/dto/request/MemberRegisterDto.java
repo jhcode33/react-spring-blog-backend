@@ -22,10 +22,10 @@ public class MemberRegisterDto {
     private String username;
 
     @Builder
-    public MemberRegisterDto(String email, String password, String passwordConfirmation, String username) {
+    public MemberRegisterDto(String email, String password, String passwordCheck, String username) {
         this.email = email;
         this.password = password;
-        this.passwordCheck = passwordConfirmation;
+        this.passwordCheck = passwordCheck;
         this.username = username;
     }
 

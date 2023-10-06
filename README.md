@@ -41,6 +41,8 @@ React와 Spring boot를 활용한 SPA 게시판 프로젝트입니다. 아래와
 - 개발 기간 : 2023.09.26 ~ 2023.10.06
 - 참여 인원 : 1명
 
+<br>
+
 ### 🛠️구현기능
 
 - **게시판 기능**
@@ -61,6 +63,7 @@ React와 Spring boot를 활용한 SPA 게시판 프로젝트입니다. 아래와
     - 회원가입
     - 로그인/로그아웃
 
+<br>
 
 ## 2. 구조 및 설계
 ### 📦DB 설계
@@ -111,5 +114,72 @@ React와 Spring boot를 활용한 SPA 게시판 프로젝트입니다. 아래와
 
 
 ## 4. 실행 화면
+
+- Main
+
+  <img width="575" alt="FrontEnd-Main" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/308af2ac-17ee-4091-b60c-c1c926d8afbe">
+
+- Join
+
+  <img width="575" alt="FrontEnd-Join" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/f5e7db67-3527-4dab-aaa1-5ac3dbb2056f">
+  <img width="575" alt="isExistEmail" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/08b84255-082f-4dba-b668-5dd36517ca9b">
+  <img width="575" alt="Join" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/4da4830c-4c29-4f0f-b025-df6b3b29cb84">
+
+- List
+
+  <img width="575" alt="FrontEnd-List" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/129a287c-8b16-4157-9a3a-b1bb57ab0a54">
+
+- SearchList
+
+  <img width="575" alt="Search" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/e689a1b1-ec08-46fb-bd5c-a70745351f77">
+  <img width="575" alt="Searching" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/5f6366e0-31db-4458-85ce-dde37e4245ff">
+
+- BoardWrite
+
+  <img width="575" alt="Write" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/32f3b3bf-0018-4c90-b6c5-c3dc752ddf8b">
+  <img width="575" alt="BoardWrite" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/df630b7c-1284-4961-9a57-650a13ace425">
+
+- BoardUpdate
+
+  <img width="575" alt="BoardUpdate" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/02cf74f7-786f-447f-8fad-aa0689edbabe">
+
+- Details
+
+  <img width="575" alt="Details" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/705dcf5f-d93b-454b-9267-1176628fd20c">
+
+- Details-login
+
+  <img width="575" alt="Details_login" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/090b59ee-a450-4fda-bb8c-b8ba72c74b76">
+
+- Comment
+
+  <img width="575" alt="CommentPaging" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/658f15a5-4149-404d-942e-2509a564726b">
+
+- File-Download
+
+  <img width="575" alt="FileDownload" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/9030bde2-02fb-468c-b649-05e1c05713f0">
+
 ## 5. 트러블 슈팅🤔
+### N + 1 해결 => @BatchSize
+
+- Jh's Notion:  <a href="https://jhcode33.notion.site/OneToMany-Paging-N-1-8e04fd0b85ba4a829f496ba0ed2be02e?pvs=4">@OneToMany Paging, N + 1 해결</a>
+
+  <img width="575" alt="boards" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/8684a3c2-e293-456d-b0f5-023c122bdae2">
+  <img width="575" alt="comments" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/cdf2e135-2fd5-467c-bcab-ad3dd5791a03">
+  
+  연관된 Comment Entity를 in 쿼리로 한 번에 가져옵니다. N + 1의 문제를 1 + 1로 해결합니다. 자세한 것을 링크에 기록해두었습니다.
+
+<br>
+
+### DTO에 관한 생각
+
+- Jh's Notion:  <a href="https://jhcode33.notion.site/DTO-128ec14ad6c445d7af846e0a777ca61a?pvs=4">DTO에 관한 생각</a>
+
+  <img width="575" alt="fromEntity" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/f861e613-d654-45fe-97f8-bda52394520f">
+  <img width="575" alt="ofEntity" src="https://github.com/jhcode33/react-spring-blog-backend/assets/125725072/bbefa15d-bce0-4b58-bd19-862f6d64dd85">
+
+  Request와 Response로 정확한 데이터를 주고 받고, JSON 직렬화 문제를 해결하기 위해 DTO 클래스를 사용했습니다.
+  Entity를 응답으로 반환하는 것이 아닌 DTO로 매핑하여 반환할 수 있도록 static 메소드를 통해서 DTO <-> 엔티티 간의 변환을 했습니다.
+
+
 ## 6. 회고📝
