@@ -1,7 +1,9 @@
 게시판 만들기 (Spring boot + React)
 =
 
->작업기간: 09.26~10.06(10일)
+>작업기간: 2023.09.26 ~ 2023.10.06 (10일) <br>
+>📑Backend Repository: https://github.com/jhcode33/react-spring-blog-backend <br>
+>📑Frontend Repository: https://github.com/jhcode33/react-spring-blog-frontend
 
 React와 Spring boot를 활용한 SPA 게시판 프로젝트입니다. 아래와 같은 문제에 대해 고민하며 프로젝트를 진행했고, 최선의 해결책을 찾아서 코드를 작성했습니다. 
 
