@@ -1,14 +1,12 @@
 package jhcode.blog.board;
 
-import jakarta.transaction.Transactional;
-import jhcode.blog.board.dto.request.BoardWriteDto;
-import jhcode.blog.board.dto.response.ResBoardWriteDto;
-import jhcode.blog.common.exception.MemberException;
-import jhcode.blog.member.Member;
-import jhcode.blog.member.MemberController;
-import jhcode.blog.member.MemberRepository;
-import jhcode.blog.member.dto.request.MemberRegisterDto;
-import jhcode.blog.member.dto.response.MemberResponseDto;
+import jhcode.blog.dto.request.board.BoardWriteDto;
+import jhcode.blog.dto.response.board.ResBoardWriteDto;
+import jhcode.blog.controller.BoardController;
+import jhcode.blog.controller.MemberController;
+import jhcode.blog.repository.MemberRepository;
+import jhcode.blog.dto.request.member.MemberRegisterDto;
+import jhcode.blog.dto.response.member.MemberResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
